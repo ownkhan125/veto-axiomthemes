@@ -441,7 +441,14 @@ body.is-nav-open { overflow: hidden; }
   width: 100%;
   background: var(--ink);
   color: var(--paper);
-  display: block;
+  /* Flex column with center justification so .hero__layout sits vertically
+     centered inside the 100vh canvas. Eliminates the dead black gap below
+     the caption when content is shorter than the viewport (most acute on
+     phone portrait + tablet portrait — was 200–330px empty there). The
+     absolute children (::before vignette, .grid-overlay) are unaffected. */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
   padding: clamp(96px, 12vh, 156px) var(--pad-x) clamp(72px, 9vh, 120px);
   isolation: isolate;
   overflow: hidden;
@@ -471,7 +478,13 @@ body.is-nav-open { overflow: hidden; }
   max-width: none;
 }
 
-/* The H1 itself — flex column for line stacking, monumental sizing. */
+/* The H1 itself — flex column for line stacking, monumental sizing.
+   Desktop curve: 11vw (preserves the designer's intended 158/188 caps at
+   1440/1920). The min is raised to 117px so values match the mobile rule
+   exactly at the 900px breakpoint (13vw × 9 = 117) — eliminates the prior
+   18px snap-down between 899 → 901 while keeping desktop scaling intact.
+   Between 901–1063 the value plateaus at 117 (the bridge), then resumes
+   continuous 11vw growth from 1064px onward. */
 .hero__h1 {
   grid-column: 1;
   display: flex;
@@ -481,7 +494,7 @@ body.is-nav-open { overflow: hidden; }
   margin: 0;
   font-family: var(--font-sans);
   font-weight: 700;
-  font-size: clamp(56px, 11vw, 188px);
+  font-size: clamp(117px, 11vw, 188px);
   line-height: 0.94;
   letter-spacing: -0.045em;
   color: var(--paper);
@@ -725,7 +738,14 @@ body.is-nav-open { overflow: hidden; }
     margin-top: 0;
     text-align: left;
   }
-  .hero__h1 { font-size: clamp(48px, 13vw, 132px); }
+  /* Mobile H1 curve — 13vw is more aggressive than the desktop 11vw to
+     keep the headline visually dominant at narrow widths. The cap is set
+     to 117px so the value lands exactly on the desktop rule's min at the
+     900px breakpoint (13 × 9 = 117 = desktop min) — no snap on the
+     mobile↔desktop boundary. */
+  .hero__h1 { font-size: clamp(48px, 13vw, 117px); }
+  /* Thumb is overridden separately so it stays proportional to the line
+     height without being yoked to the H1's vw curve at narrow widths. */
   .hero__thumb { width: clamp(56px, 14vw, 100px); }
 }
 @media (max-width: 600px) {
@@ -989,9 +1009,14 @@ body.is-nav-open { overflow: hidden; }
   transform: translateZ(0);
 }
 
-/* Bottom "View All Events" CTA — shown after the pinned rail. */
+/* Bottom "View All Events" CTA — shown after the pinned rail.
+   Top pad scales with viewport so it composes with the rail's bottom
+   empty pin-space into a single balanced break, instead of a fixed 72px
+   that felt cramped against the cards on desktop and excessive on
+   mobile. Bottom stays at --section-pad so the CTA reads as the section
+   ending rather than a mid-section element. */
 .issues__foot {
-  padding: 72px var(--pad-x) var(--section-pad);
+  padding: clamp(48px, 8vw, 128px) var(--pad-x) var(--section-pad);
   display: flex;
   justify-content: center;
   background: var(--ink);
@@ -1523,7 +1548,10 @@ body.is-nav-open { overflow: hidden; }
 .priorities {
   background: var(--offblack);
   color: var(--paper);
-  padding: 0 var(--pad-x) var(--section-pad);
+  /* Top pad is intentionally smaller than --section-pad so it composes with
+     the preceding section's bottom pad into a balanced rhythm break rather
+     than doubling the gap between two same-color blocks. */
+  padding: clamp(56px, 6vw, 96px) var(--pad-x) var(--section-pad);
   position: relative;
   /* Allows the per-row hover wash to bleed past the section's horizontal
      padding (full-bleed feel) without ever causing horizontal scroll. */
@@ -1832,7 +1860,9 @@ body.is-nav-open { overflow: hidden; }
    METRICS (Numbers)
    ============================================================= */
 .metrics {
-  padding: 0 var(--pad-x) var(--section-pad);
+  /* Same rationale as .priorities: half-rhythm top pad composes with the
+     previous section's bottom pad into a balanced break without overshoot. */
+  padding: clamp(56px, 6vw, 96px) var(--pad-x) var(--section-pad);
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
   /* Equal rows guarantee identical card heights even if labels wrap differently. */
@@ -2501,6 +2531,15 @@ body.is-nav-open { overflow: hidden; }
   .footer__top { grid-template-columns: 1fr 1fr; gap: 40px; }
   .footer__col--brand { grid-column: 1 / -1; }
   .footer__cta { gap: 24px; }
+  /* Issues / Upcoming Events rhythm on portrait phones & tablets:
+     Card is 4:5 portrait at 78vw width — much shorter than the 100vh pin
+     on portrait viewports — so the pin always has empty space around the
+     cards. Tightening the intro's bottom pad reduces the heading→card
+     gap; the rail keeps the base center alignment so the empty space
+     splits symmetrically above and below the cards. That symmetry is
+     what makes the heading→cards and cards→CTA gaps read as balanced
+     rhythm rather than a void on one side. */
+  .issues__intro { padding-bottom: clamp(32px, 5vw, 48px); }
   .issues__rail { gap: 20px; }
   .card { flex-basis: 78vw; }
 }
