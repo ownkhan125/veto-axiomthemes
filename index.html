@@ -1,0 +1,1836 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Northkin® — Independent creative studio</title>
+<meta name="description" content="Northkin is an independent creative studio building brands, sites and films for companies that refuse to look like everyone else." />
+<meta name="theme-color" content="#0A0A0A" />
+
+<!-- Type: Inter Tight is the closest free stand-in for Sharp Sans No 1.
+     Fraunces is used sparingly for one editorial accent (numbered section labels). -->
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700;800&family=Fraunces:ital,opsz,wght@0,9..144,400;1,9..144,300&display=swap" rel="stylesheet" />
+
+<style>
+/* ===========================================================
+   NORTHKIN — design tokens
+   =========================================================== */
+:root {
+  --ink:        #000000;
+  --ink-90:     #141414;
+  --ink-80:     #222222;
+  --ink-70:     #333333;
+  --ink-60:     #3F3F3F;
+  --ink-50:     #767676;
+  --ink-40:     #969696;
+  --ink-30:     #BFBFBF;
+  --ink-20:     #DDDDDD;
+  --ink-10:     #F2F2F2;
+  --paper:      #FFFFFF;
+  --offblack:   #0A0A0A;
+  --accent:     #FF5A1F; /* used once — in the hero kicker dot. Restraint. */
+
+  --font-sans:  'Inter Tight', 'Sharp Sans No 1', 'Helvetica Neue', Arial, sans-serif;
+  --font-serif: 'Fraunces', 'Times New Roman', serif;
+
+  --pad-x:       clamp(20px, 4vw, 88px);
+  --section-pad: clamp(80px, 10vw, 160px);
+
+  --ease:       cubic-bezier(.22,.61,.36,1);
+  --ease-out:   cubic-bezier(.16,1,.3,1);
+  --ease-inout: cubic-bezier(.76,0,.24,1);
+  --t-fast:     .18s var(--ease);
+  --t-med:      .34s var(--ease);
+  --t-slow:     .6s var(--ease-out);
+}
+
+/* ===========================================================
+   base
+   =========================================================== */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { background: var(--paper); color: var(--ink); min-height: 100%; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  font-family: var(--font-sans);
+  font-size: 14px;
+  line-height: 1.5;
+  font-weight: 400;
+  letter-spacing: 0;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+}
+
+/* Custom cursor: hide the native cursor on non-touch devices */
+@media (hover: hover) and (pointer: fine) {
+  html, body, a, button, input, textarea, label, .card, .chip, .services__row, .clients__cell {
+    cursor: none;
+  }
+}
+
+img, svg, video { display: block; max-width: 100%; }
+button { font: inherit; color: inherit; background: none; border: 0; }
+a      { color: inherit; text-decoration: none; }
+::selection { background: var(--ink); color: var(--paper); }
+
+/* ===========================================================
+   typography primitives
+   =========================================================== */
+.display {
+  font-weight: 700;
+  font-size: clamp(56px, 9vw, 136px);
+  line-height: .9;
+  letter-spacing: -.022em;
+}
+.h1 {
+  font-weight: 700;
+  font-size: clamp(44px, 6.2vw, 96px);
+  line-height: 1;
+  letter-spacing: -.018em;
+}
+.h2 {
+  font-weight: 600;
+  font-size: clamp(34px, 4vw, 58px);
+  line-height: 1.05;
+  letter-spacing: -.014em;
+}
+.h3 {
+  font-weight: 500;
+  font-size: clamp(26px, 2.8vw, 40px);
+  line-height: 1.18;
+  letter-spacing: -.008em;
+}
+.eyebrow {
+  font-weight: 500;
+  font-size: 12px;
+  line-height: 1;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--ink-50);
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+.eyebrow::before {
+  content: '';
+  display: inline-block;
+  width: 24px; height: 1px;
+  background: currentColor;
+}
+.lede {
+  font-weight: 400;
+  font-size: clamp(17px, 1.45vw, 20px);
+  line-height: 1.55;
+  color: var(--ink-50);
+  max-width: 46ch;
+}
+
+/* Scroll-triggered fade/slide reveals — simple, reliable, single primitive */
+[data-reveal-up], [data-reveal-words] {
+  opacity: 0;
+  transform: translateY(32px);
+  will-change: transform, opacity;
+}
+.is-revealed[data-reveal-up], .is-revealed[data-reveal-words] {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 1s var(--ease-out), transform 1s var(--ease-out);
+}
+
+/* ===========================================================
+   Custom motion cursor
+   =========================================================== */
+.cursor {
+  position: fixed;
+  top: 0; left: 0;
+  width: 0; height: 0;
+  z-index: 9999;
+  pointer-events: none;
+  mix-blend-mode: difference;
+}
+.cursor__ring {
+  position: absolute;
+  top: -22px; left: -22px;
+  width: 44px; height: 44px;
+  border: 1px solid #fff;
+  border-radius: 50%;
+  transition:
+    width .35s var(--ease),
+    height .35s var(--ease),
+    top .35s var(--ease),
+    left .35s var(--ease),
+    background .35s var(--ease),
+    border-color .35s var(--ease);
+  will-change: transform;
+}
+.cursor__dot {
+  position: absolute;
+  top: -3px; left: -3px;
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: #fff;
+  transition: opacity .25s var(--ease), transform .25s var(--ease);
+}
+.cursor.is-hover .cursor__ring {
+  width: 76px; height: 76px;
+  top: -38px; left: -38px;
+  background: rgba(255,255,255,.15);
+  border-color: transparent;
+}
+.cursor.is-hover .cursor__dot { opacity: 0; transform: scale(.5); }
+.cursor.is-text .cursor__ring {
+  width: 4px; height: 34px;
+  border-radius: 3px;
+  top: -17px; left: -2px;
+  background: #fff;
+  border-color: transparent;
+}
+.cursor.is-text .cursor__dot { opacity: 0; }
+.cursor.is-media .cursor__ring { width: 110px; height: 110px; top: -55px; left: -55px; background: rgba(255,255,255,.2); border-color: transparent; }
+.cursor.is-media::after {
+  content: 'View';
+  position: absolute;
+  top: -7px; left: -14px;
+  color: #fff;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+  opacity: 1;
+}
+.cursor:not(.is-media)::after { content: ''; opacity: 0; }
+.cursor.is-down .cursor__ring { transform: scale(.85); background: rgba(255,255,255,.3); }
+
+@media (hover: none), (pointer: coarse) { .cursor { display: none; } }
+
+/* ===========================================================
+   Preloader
+   =========================================================== */
+.preloader {
+  position: fixed;
+  inset: 0;
+  background: var(--ink);
+  color: var(--paper);
+  z-index: 9998;
+  display: grid;
+  place-items: center;
+  pointer-events: all;
+}
+.preloader__mark {
+  font-weight: 700;
+  font-size: clamp(48px, 9vw, 112px);
+  letter-spacing: -.03em;
+  line-height: 1;
+  overflow: hidden;
+}
+.preloader__mark span { display: inline-block; transform: translateY(110%); }
+.preloader__bar {
+  position: absolute;
+  left: var(--pad-x);
+  bottom: 32px;
+  right: var(--pad-x);
+  height: 1px;
+  background: rgba(255,255,255,.12);
+  overflow: hidden;
+}
+.preloader__bar i {
+  display: block;
+  height: 100%;
+  width: 0;
+  background: #fff;
+  transform-origin: left center;
+}
+.preloader__counter {
+  position: absolute;
+  right: var(--pad-x);
+  bottom: 48px;
+  font-size: 12px;
+  letter-spacing: .16em;
+  color: rgba(255,255,255,.5);
+  text-transform: uppercase;
+}
+body.is-loading { overflow: hidden; }
+
+/* ===========================================================
+   Grain overlay (fine film-like noise, site-wide but subtle)
+   =========================================================== */
+.grain {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9996;
+  opacity: .04;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 1 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+  background-size: 220px 220px;
+}
+
+/* ===========================================================
+   NAV
+   =========================================================== */
+.nav {
+  position: fixed;
+  inset: 0 0 auto 0;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  padding: 22px var(--pad-x);
+  z-index: 100;
+  mix-blend-mode: difference;
+  color: #fff;
+}
+.nav__group { display: flex; gap: 28px; }
+.nav__group--right { justify-content: flex-end; }
+.nav__link {
+  position: relative;
+  font-size: 14px;
+  font-weight: 500;
+  padding: 4px 0;
+  transition: color var(--t-med);
+}
+.nav__link::after {
+  content: '';
+  position: absolute;
+  left: 0; right: 0; bottom: 0;
+  height: 1px;
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: right center;
+  transition: transform .5s var(--ease-inout);
+}
+.nav__link:hover::after { transform: scaleX(1); transform-origin: left center; }
+.nav__brand {
+  font-weight: 700;
+  font-size: 17px;
+  letter-spacing: -.02em;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.nav__brand sup { font-size: .5em; font-weight: 400; opacity: .7; vertical-align: top; margin-top: .25em; }
+
+/* Location + time strip (tiny, far right below nav) */
+.nav__meta {
+  position: fixed;
+  top: 22px;
+  right: var(--pad-x);
+  display: none;
+  z-index: 100;
+  mix-blend-mode: difference;
+  color: #fff;
+  font-size: 11px;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  gap: 14px;
+}
+@media (min-width: 1100px) { .nav__meta { display: none; } } /* kept off — time lives near footer instead */
+
+/* ===========================================================
+   HERO
+   =========================================================== */
+.hero {
+  position: relative;
+  min-height: 100vh;
+  background: var(--ink);
+  color: var(--paper);
+  overflow: hidden;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  padding: 120px var(--pad-x) 0;
+  isolation: isolate;
+}
+.hero::before { /* soft top-vignette to weight the header */
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse 60% 40% at 50% 0%, rgba(255,255,255,.08), transparent 60%);
+  pointer-events: none;
+}
+.hero__meta {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  align-items: start;
+  color: var(--ink-40);
+  font-size: 12px;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  position: relative;
+  z-index: 3;
+}
+.hero__kicker { display: flex; gap: 12px; align-items: center; }
+.hero__kicker .dot {
+  display: inline-block;
+  width: 8px; height: 8px; border-radius: 50%;
+  background: var(--accent);
+  animation: pulse 1.6s var(--ease) infinite;
+  box-shadow: 0 0 0 0 var(--accent);
+}
+@keyframes pulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(255,90,31,.6); }
+  50%      { box-shadow: 0 0 0 8px rgba(255,90,31,0); }
+}
+.hero__meta-right { text-align: right; display: flex; gap: 16px; justify-content: flex-end; }
+
+.hero__center {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: end;
+  gap: 24px;
+  padding: 40px 0 48px;
+  z-index: 3;
+}
+.hero__tagline {
+  align-self: end;
+}
+.hero__tagline .eyebrow { color: var(--ink-40); margin-bottom: 18px; }
+.hero__tagline h1 {
+  font-weight: 600;
+  font-size: clamp(22px, 2vw, 30px);
+  line-height: 1.25;
+  letter-spacing: -.01em;
+  max-width: 16ch;
+}
+.hero__statement {
+  align-self: end;
+  justify-self: end;
+  font-weight: 500;
+  font-size: clamp(15px, 1.1vw, 17px);
+  line-height: 1.55;
+  color: var(--paper);
+  max-width: 34ch;
+  text-shadow: 0 2px 24px rgba(0,0,0,.55);
+  position: relative;
+}
+.hero__statement em { font-style: normal; color: var(--ink-50); }
+
+.hero__wordmark {
+  text-align: center;
+  font-weight: 700;
+  font-size: clamp(72px, 22vw, 376px);
+  line-height: .82;
+  letter-spacing: -.042em;
+  padding-bottom: 64px;
+  user-select: none;
+  position: relative;
+  z-index: 2;
+}
+.hero__wordmark-letter {
+  display: inline-block;
+  overflow: hidden;
+  vertical-align: bottom;
+  line-height: 1;
+}
+.hero__wordmark-letter > span {
+  display: inline-block;
+  will-change: transform;
+}
+
+.hero__orb {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  pointer-events: none;
+  z-index: 1;
+}
+.hero__orb-inner {
+  width: clamp(280px, 36vw, 520px);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 32% 28%, rgba(255,255,255,.95), rgba(255,255,255,0) 34%),
+    radial-gradient(circle at 72% 74%, rgba(180,180,180,.55), rgba(20,20,20,0) 60%),
+    conic-gradient(from 200deg at 50% 50%, #2a2a2a, #ffffff, #1a1a1a, #b8b8b8, #2a2a2a);
+  filter: blur(.4px) contrast(1.05) saturate(.95);
+  box-shadow:
+    inset 0 60px 120px rgba(255,255,255,.04),
+    0 0 120px rgba(255,255,255,.06),
+    0 40px 80px rgba(0,0,0,.4);
+  animation: orbSpin 32s linear infinite;
+  will-change: transform;
+}
+@keyframes orbSpin { to { transform: rotate(360deg); } }
+
+.hero__scroll {
+  position: absolute;
+  bottom: 24px;
+  left: var(--pad-x);
+  font-size: 11px;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  color: var(--ink-40);
+  display: flex; gap: 12px; align-items: center;
+  z-index: 3;
+}
+.hero__scroll::after {
+  content: '';
+  display: block;
+  width: 1px; height: 36px;
+  background: var(--ink-40);
+  transform-origin: top;
+  animation: scrollLine 1.8s var(--ease-inout) infinite;
+}
+@keyframes scrollLine {
+  0%   { transform: scaleY(0); transform-origin: top; }
+  50%  { transform: scaleY(1); transform-origin: top; }
+  50.01%{ transform-origin: bottom; }
+  100% { transform: scaleY(0); transform-origin: bottom; }
+}
+
+/* ===========================================================
+   AVAILABILITY strip — thin meta bar under hero
+   =========================================================== */
+.strip {
+  background: var(--paper);
+  border-block: 1px solid var(--ink);
+  padding: 14px var(--pad-x);
+  display: flex;
+  justify-content: space-between;
+  gap: 24px;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  flex-wrap: wrap;
+}
+.strip span { display: inline-flex; gap: 10px; align-items: center; }
+.strip span::before {
+  content: '';
+  width: 6px; height: 6px; border-radius: 50%;
+  background: var(--ink);
+}
+.strip span:first-child::before { background: var(--accent); }
+
+/* ===========================================================
+   MARQUEE
+   =========================================================== */
+.marquee {
+  background: var(--paper);
+  color: var(--ink);
+  overflow: hidden;
+  padding: 28px 0;
+  border-block: 1px solid var(--ink);
+}
+.marquee--dark { background: var(--offblack); color: var(--paper); border-color: var(--paper); }
+.marquee__track {
+  display: flex;
+  gap: 64px;
+  white-space: nowrap;
+  animation: marquee 42s linear infinite;
+  font-weight: 600;
+  font-size: clamp(28px, 3vw, 44px);
+  line-height: 1;
+  letter-spacing: -.012em;
+  will-change: transform;
+}
+.marquee__track > span { display: inline-flex; align-items: center; gap: 64px; }
+.marquee__track .star {
+  display: inline-block;
+  width: 18px; height: 18px;
+  background: currentColor;
+  border-radius: 50%;
+}
+.marquee:hover .marquee__track { animation-play-state: paused; }
+@keyframes marquee { to { transform: translateX(-50%); } }
+
+/* ===========================================================
+   THE WORK — pinned horizontal
+   =========================================================== */
+.work {
+  background: var(--ink);
+  color: var(--paper);
+  overflow: hidden;
+  position: relative;
+}
+.work__intro {
+  padding: var(--section-pad) var(--pad-x) 72px;
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap: 48px;
+  align-items: end;
+}
+.work__intro .h1 { line-height: .92; }
+.work__intro a {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 500;
+  font-size: 14px;
+  color: var(--paper);
+  border-bottom: 1px solid var(--paper);
+  padding-bottom: 6px;
+  align-self: end;
+  justify-self: start;
+  transition: gap var(--t-med), opacity var(--t-med);
+}
+.work__intro a:hover { gap: 18px; }
+.work__pin { height: 100vh; position: relative; }
+.work__rail {
+  display: flex;
+  height: 100vh;
+  align-items: center;
+  padding: 0 var(--pad-x);
+  gap: 28px;
+  will-change: transform;
+}
+.card {
+  flex: 0 0 min(78vh, 680px);
+  aspect-ratio: 4 / 5;
+  border-radius: 18px;
+  position: relative;
+  overflow: hidden;
+  background: #111;
+  transition: transform .5s var(--ease-out);
+}
+.card::after { /* gentle reflection highlight */
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(255,255,255,.05), rgba(0,0,0,0) 40%, rgba(0,0,0,.25));
+  pointer-events: none;
+  transition: opacity var(--t-med);
+}
+.card:hover { transform: translateY(-10px); }
+.card__bg {
+  position: absolute;
+  inset: 0;
+  background: var(--bg, #222);
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  transition: transform 1s var(--ease-out);
+}
+.card:hover .card__bg { transform: scale(1.04); }
+.card__bg::before {
+  content: '';
+  position: absolute;
+  inset: -20%;
+  background:
+    radial-gradient(circle at 30% 30%, rgba(255,255,255,.18), transparent 40%),
+    radial-gradient(circle at 70% 80%, rgba(0,0,0,.4), transparent 55%);
+}
+.card__glyph {
+  position: relative;
+  font-weight: 800;
+  font-size: clamp(120px, 22vh, 280px);
+  line-height: .85;
+  letter-spacing: -.04em;
+  color: rgba(255,255,255,.92);
+  mix-blend-mode: overlay;
+  transition: transform 1s var(--ease-out);
+}
+.card:hover .card__glyph { transform: translateY(-8px) scale(1.02); }
+.card__meta {
+  position: absolute;
+  inset: auto 24px 24px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  color: var(--paper);
+  z-index: 2;
+}
+.card__meta-top { display: flex; flex-wrap: wrap; gap: 8px; }
+.chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 8px 16px;
+  border: 1px solid rgba(255,255,255,.65);
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 500;
+  background: transparent;
+  color: var(--paper);
+  transition: background var(--t-med), color var(--t-med), border-color var(--t-med), transform var(--t-med);
+}
+.chip:hover { background: var(--paper); color: var(--ink); border-color: var(--paper); transform: translateY(-2px); }
+.chip--ink { border-color: var(--ink); color: var(--ink); }
+.chip--ink:hover { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+.chip--active { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+.card__title {
+  font-weight: 500;
+  font-size: clamp(30px, 3vw, 46px);
+  line-height: 1.05;
+  letter-spacing: -.01em;
+}
+.card__keys {
+  font-size: 12px;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,.85);
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.card__keys span { position: relative; padding-right: 14px; }
+.card__keys span:not(:last-child)::after {
+  content: '';
+  position: absolute;
+  right: 0; top: 50%;
+  width: 4px; height: 4px; border-radius: 50%;
+  background: rgba(255,255,255,.75);
+  transform: translateY(-50%);
+}
+.card__cta {
+  position: absolute;
+  inset: 24px 24px auto auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px;
+  border: 1px solid rgba(255,255,255,.7);
+  border-radius: 999px;
+  font-size: 11px;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  background: rgba(0,0,0,.2);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  transition: background var(--t-med), gap var(--t-med), transform var(--t-med);
+  z-index: 3;
+}
+.card__cta:hover { background: rgba(255,255,255,.95); color: #111; gap: 14px; }
+.card__number {
+  position: absolute;
+  inset: 24px auto auto 24px;
+  font-size: 11px;
+  letter-spacing: .18em;
+  color: rgba(255,255,255,.7);
+  text-transform: uppercase;
+  z-index: 2;
+}
+
+/* ===========================================================
+   MANIFESTO
+   =========================================================== */
+.manifesto {
+  background: var(--paper);
+  padding: var(--section-pad) var(--pad-x);
+  position: relative;
+}
+.manifesto__eyebrow { margin-bottom: 64px; }
+.manifesto__pull {
+  font-weight: 600;
+  font-size: clamp(36px, 5.2vw, 84px);
+  line-height: 1.04;
+  letter-spacing: -.018em;
+  max-width: 22ch;
+}
+.manifesto__pull em {
+  font-style: italic;
+  font-family: var(--font-serif);
+  font-weight: 300;
+  color: var(--ink-60);
+}
+.manifesto__columns {
+  margin-top: 96px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 48px;
+  padding-top: 32px;
+  border-top: 1px solid var(--ink-20);
+}
+.manifesto__columns h4 {
+  font-size: 13px;
+  font-weight: 500;
+  margin-bottom: 20px;
+  color: var(--ink-50);
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+.manifesto__columns h4::before { content: ''; width: 18px; height: 1px; background: currentColor; }
+.manifesto__columns p {
+  font-size: 16px;
+  line-height: 1.55;
+  color: var(--ink);
+  max-width: 34ch;
+}
+
+/* ===========================================================
+   PROCESS — 4-step cards
+   =========================================================== */
+.process {
+  background: var(--offblack);
+  color: var(--paper);
+  padding: var(--section-pad) var(--pad-x);
+  position: relative;
+  overflow: hidden;
+}
+.process__head {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 48px;
+  align-items: end;
+  margin-bottom: 80px;
+}
+.process__head .lede { color: var(--ink-40); }
+.process__grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1px;
+  background: rgba(255,255,255,.14);
+  border: 1px solid rgba(255,255,255,.14);
+}
+.process__step {
+  background: var(--offblack);
+  padding: 36px 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  min-height: 340px;
+  transition: background var(--t-med);
+}
+.process__step:hover { background: #111; }
+.process__step-num {
+  font-family: var(--font-serif);
+  font-weight: 300;
+  font-style: italic;
+  font-size: 20px;
+  color: var(--ink-40);
+}
+.process__step h3 {
+  font-weight: 600;
+  font-size: clamp(24px, 2.2vw, 34px);
+  line-height: 1.1;
+  letter-spacing: -.01em;
+}
+.process__step p {
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--ink-40);
+  margin-top: auto;
+}
+.process__step ul {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 13px;
+  color: var(--ink-40);
+}
+.process__step li { display: flex; align-items: center; gap: 8px; }
+.process__step li::before { content: '+'; color: var(--ink-50); }
+
+/* ===========================================================
+   SERVICES — numbered list
+   =========================================================== */
+.services {
+  background: var(--paper);
+  padding: var(--section-pad) var(--pad-x);
+}
+.services__head { margin-bottom: 56px; }
+.services__list { display: flex; flex-direction: column; }
+.services__row {
+  display: flex;
+  align-items: center;
+  gap: clamp(20px, 3vw, 48px);
+  padding: clamp(22px, 3.2vh, 40px) 0;
+  border-top: 1px solid var(--ink);
+  position: relative;
+  transition: padding-left var(--t-med);
+}
+.services__row:last-child { border-bottom: 1px solid var(--ink); }
+.services__row:hover { padding-left: 24px; }
+.services__num {
+  width: 38px; height: 38px; border-radius: 50%;
+  border: 1px solid var(--ink);
+  display: grid; place-items: center;
+  font-size: 13px; font-weight: 500;
+  flex-shrink: 0;
+  transition: background var(--t-med), color var(--t-med);
+}
+.services__row:hover .services__num { background: var(--ink); color: var(--paper); }
+.services__name {
+  font-weight: 700;
+  font-size: clamp(40px, 6vw, 96px);
+  line-height: 1;
+  letter-spacing: -.025em;
+}
+.services__tag {
+  margin-left: auto;
+  color: var(--ink-50);
+  font-size: 13px;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+  transition: opacity var(--t-med), transform var(--t-med);
+}
+.services__arrow {
+  width: 24px; height: 24px;
+  flex-shrink: 0;
+  opacity: 0;
+  transform: translateX(-20px);
+  transition: opacity var(--t-med), transform var(--t-med);
+}
+.services__row:hover .services__arrow { opacity: 1; transform: translateX(0); }
+.services__row:hover .services__tag { opacity: 0; transform: translateX(20px); }
+
+/* ===========================================================
+   CLIENTS
+   =========================================================== */
+.clients {
+  background: var(--paper);
+  padding: var(--section-pad) var(--pad-x);
+  border-top: 1px solid var(--ink-20);
+}
+.clients__head {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr;
+  gap: 48px;
+  align-items: end;
+  margin-bottom: 64px;
+}
+.clients__grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1px;
+  background: var(--ink-20);
+  border: 1px solid var(--ink-20);
+}
+.clients__cell {
+  background: var(--paper);
+  aspect-ratio: 5 / 2;
+  display: grid;
+  place-items: center;
+  font-weight: 700;
+  font-size: clamp(16px, 1.6vw, 22px);
+  color: var(--ink);
+  letter-spacing: -.01em;
+  transition: background var(--t-med), color var(--t-med);
+  position: relative;
+  overflow: hidden;
+}
+.clients__cell::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--ink);
+  transform: translateY(100%);
+  transition: transform var(--t-slow) var(--ease-inout);
+  z-index: 0;
+}
+.clients__cell:hover::before { transform: translateY(0); }
+.clients__cell > span { position: relative; z-index: 1; transition: color var(--t-med); }
+.clients__cell:hover > span { color: var(--paper); }
+
+/* ===========================================================
+   NUMBERS strip
+   =========================================================== */
+.numbers {
+  background: var(--paper);
+  padding: 0 var(--pad-x) var(--section-pad);
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1px;
+  background: var(--ink-20);
+}
+.numbers__cell {
+  background: var(--paper);
+  padding: 40px 24px 56px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.numbers__cell strong {
+  font-family: var(--font-serif);
+  font-weight: 400;
+  font-size: clamp(44px, 6vw, 84px);
+  line-height: 1;
+  letter-spacing: -.025em;
+  color: var(--ink);
+}
+.numbers__cell strong sup {
+  font-size: .45em;
+  vertical-align: baseline;
+  line-height: 0;
+  position: relative;
+  top: -.55em;
+  margin-left: .05em;
+  color: var(--ink-50);
+  font-family: var(--font-sans);
+  font-weight: 500;
+}
+.numbers__cell span {
+  font-size: 12px;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  color: var(--ink-50);
+  margin-top: 12px;
+}
+
+/* ===========================================================
+   CONTACT
+   =========================================================== */
+.contact {
+  background: var(--paper);
+  padding: var(--section-pad) var(--pad-x);
+  border-top: 1px solid var(--ink);
+}
+.contact__head {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 48px;
+  align-items: end;
+  margin-bottom: 80px;
+}
+.contact__form {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 36px 32px;
+}
+.contact__form > .full { grid-column: 1 / -1; }
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.field label {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--ink-50);
+  letter-spacing: .14em;
+  text-transform: uppercase;
+}
+.field input, .field textarea {
+  font: inherit;
+  font-size: 18px;
+  padding: 10px 0 14px;
+  border: 0;
+  border-bottom: 1px solid var(--ink);
+  background: transparent;
+  color: var(--ink);
+  outline: none;
+  transition: border-color var(--t-med), padding-bottom var(--t-med);
+}
+.field input::placeholder, .field textarea::placeholder { color: var(--ink-40); }
+.field input:focus, .field textarea:focus { border-bottom-color: var(--accent); padding-bottom: 16px; }
+.field textarea { min-height: 120px; resize: vertical; }
+.chips { display: flex; flex-wrap: wrap; gap: 12px; }
+.contact__send {
+  margin-top: 48px;
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  padding: 22px 34px;
+  border: 1px solid var(--ink);
+  border-radius: 999px;
+  font-weight: 500;
+  font-size: 15px;
+  letter-spacing: .02em;
+  background: var(--ink);
+  color: var(--paper);
+  position: relative;
+  overflow: hidden;
+  transition: gap var(--t-med);
+}
+.contact__send::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--paper);
+  transform: translateY(100%);
+  transition: transform .5s var(--ease-inout);
+  z-index: 0;
+}
+.contact__send:hover::before { transform: translateY(0); }
+.contact__send > * { position: relative; z-index: 1; transition: color var(--t-med); }
+.contact__send:hover > * { color: var(--ink); }
+.contact__send:hover { gap: 18px; }
+
+/* ===========================================================
+   FOOTER
+   =========================================================== */
+.footer {
+  background: var(--offblack);
+  color: var(--paper);
+  padding: 80px var(--pad-x) 24px;
+  position: relative;
+}
+.footer__top {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+  gap: 48px;
+  padding-bottom: 64px;
+  border-bottom: 1px solid rgba(255,255,255,.12);
+}
+.footer__col h5 {
+  font-size: 12px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: .18em;
+  color: var(--ink-40);
+  margin-bottom: 20px;
+}
+.footer__col p, .footer__col a { display: block; font-size: 14px; color: var(--paper); line-height: 1.7; }
+.footer__col a { padding: 4px 0; transition: opacity var(--t-med), padding-left var(--t-med); }
+.footer__col a:hover { opacity: 1; padding-left: 6px; }
+.footer__col strong { font-weight: 600; }
+.footer__bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 32px;
+  font-size: 12px;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--ink-40);
+}
+.footer__wordmark {
+  font-weight: 700;
+  font-size: clamp(80px, 22vw, 332px);
+  line-height: .82;
+  letter-spacing: -.042em;
+  text-align: center;
+  padding: 72px 0 24px;
+  user-select: none;
+  background: linear-gradient(180deg, var(--paper) 0%, rgba(255,255,255,.35) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* ===========================================================
+   responsive
+   =========================================================== */
+@media (max-width: 1024px) {
+  .process__grid { grid-template-columns: repeat(2, 1fr); }
+  .numbers { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 900px) {
+  .nav { padding: 16px var(--pad-x); }
+  .nav__group { gap: 16px; }
+  .nav__brand { font-size: 15px; }
+  .hero__center, .hero__meta { grid-template-columns: 1fr; }
+  .hero__statement { justify-self: start; }
+  .hero__meta-right { justify-content: flex-start; text-align: left; }
+  .manifesto__columns { grid-template-columns: 1fr; gap: 32px; }
+  .clients__grid { grid-template-columns: repeat(2, 1fr); }
+  .contact__head, .manifesto__head, .clients__head, .work__intro, .process__head { grid-template-columns: 1fr; gap: 32px; }
+  .contact__form { grid-template-columns: 1fr; }
+  .footer__top { grid-template-columns: 1fr 1fr; }
+  .work__rail { gap: 20px; }
+  .card { flex-basis: 78vw; }
+}
+@media (max-width: 600px) {
+  .nav__group--left .nav__link:nth-child(2),
+  .nav__group--right .nav__link:nth-child(1) { display: none; }
+  .footer__top { grid-template-columns: 1fr; }
+  .services__name { font-size: 40px; }
+  .services__tag, .services__arrow { display: none; }
+  .numbers { grid-template-columns: 1fr; }
+  .strip { gap: 12px; font-size: 11px; }
+}
+
+/* respect motion prefs */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .01ms !important;
+  }
+  .hero__orb-inner { animation: none; }
+  .marquee__track { animation: none; }
+  [data-reveal-up], .word-mask > .word { opacity: 1 !important; transform: none !important; }
+}
+</style>
+</head>
+<body class="is-loading">
+
+<!-- =========================================================
+     PRELOADER
+     ========================================================= -->
+<div class="preloader" id="preloader" aria-hidden="true">
+  <div class="preloader__mark" aria-label="Northkin"><span>northkin®</span></div>
+  <div class="preloader__counter" id="preloaderCount">00</div>
+  <div class="preloader__bar"><i id="preloaderBar"></i></div>
+</div>
+
+<!-- =========================================================
+     GRAIN OVERLAY + CUSTOM CURSOR
+     ========================================================= -->
+<div class="grain" aria-hidden="true"></div>
+<div class="cursor" id="cursor" aria-hidden="true">
+  <div class="cursor__ring"></div>
+  <div class="cursor__dot"></div>
+</div>
+
+<!-- =========================================================
+     NAV
+     ========================================================= -->
+<nav class="nav" aria-label="Primary">
+  <div class="nav__group nav__group--left">
+    <a href="#work"   class="nav__link">Work</a>
+    <a href="#studio" class="nav__link">Studio</a>
+  </div>
+  <a href="#top" class="nav__brand">northkin<sup>®</sup></a>
+  <div class="nav__group nav__group--right">
+    <a href="#journal" class="nav__link">Journal</a>
+    <a href="#contact" class="nav__link">Contact</a>
+  </div>
+</nav>
+
+<!-- =========================================================
+     HERO
+     ========================================================= -->
+<header id="top" class="hero">
+  <div class="hero__orb"><div class="hero__orb-inner"></div></div>
+
+  <div class="hero__meta">
+    <div class="hero__kicker">
+      <span class="dot"></span>
+      <span>Booking Q3 / Q4 2026</span>
+    </div>
+    <div class="hero__meta-right">
+      <span>Lisbon <em style="font-style:normal;color:var(--paper);margin-left:6px;" id="navClock">00:00</em></span>
+      <span>New York</span>
+      <span>EST. 2014</span>
+    </div>
+  </div>
+
+  <div class="hero__center">
+    <div class="hero__tagline">
+      <div class="eyebrow" style="color: var(--ink-40);">Independent creative studio</div>
+      <h1 class="hero__h1">A studio for brands that refuse to look like everyone else.</h1>
+    </div>
+    <p class="hero__statement">
+      We build identities, motion, and digital products for founders and operators with conviction — not committees.
+    </p>
+  </div>
+
+  <div class="hero__wordmark" aria-label="Northkin">
+    <span class="hero__wordmark-letter"><span data-hero-letter>n</span></span><span class="hero__wordmark-letter"><span data-hero-letter>o</span></span><span class="hero__wordmark-letter"><span data-hero-letter>r</span></span><span class="hero__wordmark-letter"><span data-hero-letter>t</span></span><span class="hero__wordmark-letter"><span data-hero-letter>h</span></span><span class="hero__wordmark-letter"><span data-hero-letter>k</span></span><span class="hero__wordmark-letter"><span data-hero-letter>i</span></span><span class="hero__wordmark-letter"><span data-hero-letter>n</span></span>
+  </div>
+
+  <div class="hero__scroll">Scroll to explore</div>
+</header>
+
+<!-- =========================================================
+     AVAILABILITY STRIP
+     ========================================================= -->
+<aside class="strip">
+  <span>Booking for Q3 · Q4 2026</span>
+  <span>Lisbon · New York</span>
+  <span>hello@northkin.studio</span>
+</aside>
+
+<!-- =========================================================
+     MARQUEE
+     ========================================================= -->
+<section class="marquee" aria-hidden="true">
+  <div class="marquee__track">
+    <span>Brand identity <i class="star"></i> Motion design <i class="star"></i> Editorial sites <i class="star"></i> Art direction <i class="star"></i> Campaigns <i class="star"></i> Packaging <i class="star"></i></span>
+    <span>Brand identity <i class="star"></i> Motion design <i class="star"></i> Editorial sites <i class="star"></i> Art direction <i class="star"></i> Campaigns <i class="star"></i> Packaging <i class="star"></i></span>
+  </div>
+</section>
+
+<!-- =========================================================
+     THE WORK — pinned horizontal
+     ========================================================= -->
+<section id="work" class="work">
+  <div class="work__intro">
+    <div>
+      <div class="eyebrow" data-reveal-up style="margin-bottom: 32px; color: var(--ink-40);">Selected work</div>
+      <h2 class="h1" data-reveal-words>Recent brand work, 2023 – 2026.</h2>
+    </div>
+    <a href="#archive" data-cursor="link">View full archive <span>→</span></a>
+  </div>
+
+  <div class="work__pin" id="workPin">
+    <div class="work__rail" id="workRail">
+
+      <article class="card" style="--bg:#E0451B" data-cursor="media">
+        <div class="card__bg"><div class="card__glyph">F</div></div>
+        <div class="card__number">Case 01</div>
+        <a href="#" class="card__cta">Read case →</a>
+        <div class="card__meta">
+          <div class="card__meta-top">
+            <span class="chip">Identity</span><span class="chip">Packaging</span><span class="chip">Campaign</span>
+          </div>
+          <h3 class="card__title">Fielder Provisions Co.</h3>
+          <div class="card__keys"><span>Food</span><span>Retail</span><span>2025</span></div>
+        </div>
+      </article>
+
+      <article class="card" style="--bg:#1F37C9" data-cursor="media">
+        <div class="card__bg"><div class="card__glyph">S</div></div>
+        <div class="card__number">Case 02</div>
+        <a href="#" class="card__cta">Read case →</a>
+        <div class="card__meta">
+          <div class="card__meta-top">
+            <span class="chip">Brand</span><span class="chip">UI/UX</span><span class="chip">Web</span>
+          </div>
+          <h3 class="card__title">Saunter Mobility</h3>
+          <div class="card__keys"><span>Transport</span><span>App</span><span>2024</span></div>
+        </div>
+      </article>
+
+      <article class="card" style="--bg:#6B2EE5" data-cursor="media">
+        <div class="card__bg"><div class="card__glyph">M</div></div>
+        <div class="card__number">Case 03</div>
+        <a href="#" class="card__cta">Read case →</a>
+        <div class="card__meta">
+          <div class="card__meta-top">
+            <span class="chip">Identity</span><span class="chip">Motion</span><span class="chip">Print</span>
+          </div>
+          <h3 class="card__title">Moss &amp; Mantel</h3>
+          <div class="card__keys"><span>Hospitality</span><span>Editorial</span><span>2025</span></div>
+        </div>
+      </article>
+
+      <article class="card" style="--bg:#D11A2A" data-cursor="media">
+        <div class="card__bg"><div class="card__glyph">P</div></div>
+        <div class="card__number">Case 04</div>
+        <a href="#" class="card__cta">Read case →</a>
+        <div class="card__meta">
+          <div class="card__meta-top">
+            <span class="chip">Rebrand</span><span class="chip">Social</span><span class="chip">Film</span>
+          </div>
+          <h3 class="card__title">Pyre Athletics</h3>
+          <div class="card__keys"><span>Sport</span><span>Apparel</span><span>2025</span></div>
+        </div>
+      </article>
+
+      <article class="card" style="--bg:#0E7C5A" data-cursor="media">
+        <div class="card__bg"><div class="card__glyph">L</div></div>
+        <div class="card__number">Case 05</div>
+        <a href="#" class="card__cta">Read case →</a>
+        <div class="card__meta">
+          <div class="card__meta-top">
+            <span class="chip">Brand</span><span class="chip">Web</span><span class="chip">Photography</span>
+          </div>
+          <h3 class="card__title">Lowtide Coffee</h3>
+          <div class="card__keys"><span>Hospitality</span><span>Retail</span><span>2024</span></div>
+        </div>
+      </article>
+
+      <article class="card" style="--bg:#F2A71B" data-cursor="media">
+        <div class="card__bg"><div class="card__glyph">K</div></div>
+        <div class="card__number">Case 06</div>
+        <a href="#" class="card__cta">Read case →</a>
+        <div class="card__meta">
+          <div class="card__meta-top">
+            <span class="chip">Identity</span><span class="chip">Editorial</span>
+          </div>
+          <h3 class="card__title">Kindling Press</h3>
+          <div class="card__keys"><span>Publishing</span><span>Print</span><span>2026</span></div>
+        </div>
+      </article>
+
+    </div>
+  </div>
+</section>
+
+<!-- =========================================================
+     DARK MARQUEE — archive link
+     ========================================================= -->
+<section class="marquee marquee--dark" aria-hidden="true">
+  <div class="marquee__track">
+    <span>See the archive <i class="star"></i> See the archive <i class="star"></i> See the archive <i class="star"></i> See the archive <i class="star"></i></span>
+    <span>See the archive <i class="star"></i> See the archive <i class="star"></i> See the archive <i class="star"></i> See the archive <i class="star"></i></span>
+  </div>
+</section>
+
+<!-- =========================================================
+     MANIFESTO
+     ========================================================= -->
+<section id="studio" class="manifesto">
+  <div class="eyebrow manifesto__eyebrow" data-reveal-up>The studio</div>
+
+  <h2 class="manifesto__pull" data-reveal-words>
+    We don't pitch decks. We pitch <em>endings</em> — what your brand looks like once we're done with it.
+  </h2>
+
+  <div class="manifesto__columns">
+    <div data-reveal-up>
+      <h4>How we work</h4>
+      <p>Small teams. One studio lead per project, no account layer between you and the people doing the work. Fewer meetings, more output.</p>
+    </div>
+    <div data-reveal-up>
+      <h4>What we make</h4>
+      <p>Identities that survive a redesign. Sites that don't need a rebuild every two years. Films you'd actually share. Packaging that earns its shelf.</p>
+    </div>
+    <div data-reveal-up>
+      <h4>Who we're for</h4>
+      <p>Founders shipping their second product. Heritage brands done with the heritage look. Anyone who has been told to "play it safe" and doesn't want to.</p>
+    </div>
+  </div>
+</section>
+
+<!-- =========================================================
+     PROCESS
+     ========================================================= -->
+<section class="process">
+  <div class="process__head">
+    <div>
+      <div class="eyebrow" data-reveal-up style="color: var(--ink-40); margin-bottom: 28px;">Method</div>
+      <h2 class="h1" data-reveal-words>Four phases. No recycled decks.</h2>
+    </div>
+    <p class="lede" data-reveal-up>Every engagement runs on the same rhythm. You'll know what we're doing, what we're deciding, and what we're waiting on — every week.</p>
+  </div>
+
+  <div class="process__grid">
+    <div class="process__step" data-reveal-up>
+      <span class="process__step-num">Phase I</span>
+      <h3>Discover</h3>
+      <ul>
+        <li>Stakeholder interviews</li>
+        <li>Audit + positioning</li>
+        <li>Competitive landscape</li>
+      </ul>
+      <p>We start by reading the room — your category, your customers, and the gap only you can hold.</p>
+    </div>
+    <div class="process__step" data-reveal-up>
+      <span class="process__step-num">Phase II</span>
+      <h3>Strategy</h3>
+      <ul>
+        <li>Narrative + voice</li>
+        <li>Brand architecture</li>
+        <li>Design principles</li>
+      </ul>
+      <p>A point of view sharp enough to guide every downstream decision — without a 60-page deck.</p>
+    </div>
+    <div class="process__step" data-reveal-up>
+      <span class="process__step-num">Phase III</span>
+      <h3>Craft</h3>
+      <ul>
+        <li>Identity system</li>
+        <li>Motion + type</li>
+        <li>Product + site design</li>
+      </ul>
+      <p>Two concepts, then refinement. We design in high-fidelity, not mood boards — so you can see it working.</p>
+    </div>
+    <div class="process__step" data-reveal-up>
+      <span class="process__step-num">Phase IV</span>
+      <h3>Ship</h3>
+      <ul>
+        <li>Build + QA</li>
+        <li>Guidelines + handoff</li>
+        <li>90-day support</li>
+      </ul>
+      <p>We don't disappear at launch. Three months of support baked in — so the system lives past week one.</p>
+    </div>
+  </div>
+</section>
+
+<!-- =========================================================
+     SERVICES — numbered list
+     ========================================================= -->
+<section class="services">
+  <div class="services__head">
+    <div class="eyebrow" data-reveal-up>Capabilities</div>
+  </div>
+  <div class="services__list">
+    <div class="services__row"><span class="services__num">1</span><span class="services__name">Brand Identity</span><span class="services__tag">Naming · Marks · Systems</span><svg class="services__arrow" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 19L19 5M19 5H9M19 5V15" stroke="currentColor" stroke-width="1.6"/></svg></div>
+    <div class="services__row"><span class="services__num">2</span><span class="services__name">Web &amp; Product</span><span class="services__tag">Design · Build · Ship</span><svg class="services__arrow" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 19L19 5M19 5H9M19 5V15" stroke="currentColor" stroke-width="1.6"/></svg></div>
+    <div class="services__row"><span class="services__num">3</span><span class="services__name">Art Direction</span><span class="services__tag">Campaigns · Stills</span><svg class="services__arrow" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 19L19 5M19 5H9M19 5V15" stroke="currentColor" stroke-width="1.6"/></svg></div>
+    <div class="services__row"><span class="services__num">4</span><span class="services__name">Motion &amp; Film</span><span class="services__tag">Spots · Social · Titles</span><svg class="services__arrow" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 19L19 5M19 5H9M19 5V15" stroke="currentColor" stroke-width="1.6"/></svg></div>
+    <div class="services__row"><span class="services__num">5</span><span class="services__name">Packaging</span><span class="services__tag">Structural · Graphics</span><svg class="services__arrow" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 19L19 5M19 5H9M19 5V15" stroke="currentColor" stroke-width="1.6"/></svg></div>
+    <div class="services__row"><span class="services__num">6</span><span class="services__name">Editorial</span><span class="services__tag">Books · Print · Type</span><svg class="services__arrow" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 19L19 5M19 5H9M19 5V15" stroke="currentColor" stroke-width="1.6"/></svg></div>
+  </div>
+</section>
+
+<!-- =========================================================
+     CLIENTS
+     ========================================================= -->
+<section class="clients">
+  <div class="clients__head">
+    <div>
+      <div class="eyebrow" data-reveal-up style="margin-bottom: 28px;">Trusted by</div>
+      <h2 class="h1" data-reveal-words>Operators, not committees.</h2>
+    </div>
+    <p class="lede" data-reveal-up>A short list of the brands who've let us do our best work — independents, founders, and the occasional heritage name paying for the courage to be different.</p>
+  </div>
+
+  <div class="clients__grid" role="list">
+    <a href="#" class="clients__cell" role="listitem"><span>Saunter</span></a>
+    <a href="#" class="clients__cell" role="listitem"><span>Fielder</span></a>
+    <a href="#" class="clients__cell" role="listitem"><span>Pyre</span></a>
+    <a href="#" class="clients__cell" role="listitem"><span>Kindling</span></a>
+    <a href="#" class="clients__cell" role="listitem"><span>Lowtide</span></a>
+    <a href="#" class="clients__cell" role="listitem"><span>Moss &amp; Mantel</span></a>
+    <a href="#" class="clients__cell" role="listitem"><span>Halcyon Foods</span></a>
+    <a href="#" class="clients__cell" role="listitem"><span>Northern Tile Co.</span></a>
+  </div>
+</section>
+
+<!-- =========================================================
+     NUMBERS STRIP
+     ========================================================= -->
+<section class="numbers">
+  <div class="numbers__cell" data-reveal-up>
+    <strong><span data-count="12">0</span></strong>
+    <span>years independent</span>
+  </div>
+  <div class="numbers__cell" data-reveal-up>
+    <strong><span data-count="84">0</span><sup>+</sup></strong>
+    <span>projects shipped</span>
+  </div>
+  <div class="numbers__cell" data-reveal-up>
+    <strong><span data-count="3">0</span></strong>
+    <span>continents served</span>
+  </div>
+  <div class="numbers__cell" data-reveal-up>
+    <strong><span data-count="97">0</span><sup>%</sup></strong>
+    <span>returning clients</span>
+  </div>
+</section>
+
+<!-- =========================================================
+     CONTACT
+     ========================================================= -->
+<section id="contact" class="contact">
+  <div class="contact__head">
+    <div>
+      <div class="eyebrow" data-reveal-up style="margin-bottom: 28px;">Start a project</div>
+      <h2 class="h1" data-reveal-words>Tell us what you're building.</h2>
+    </div>
+    <p class="lede" data-reveal-up>We respond inside two business days — with whether we're the right fit, a rough scope, and a calendar hold. No forms-into-a-void here.</p>
+  </div>
+
+  <form class="contact__form" onsubmit="event.preventDefault(); alert('Thanks — we\'ll be in touch.');">
+
+    <div class="field full">
+      <label>You need</label>
+      <div class="chips" data-chip-group="services">
+        <button type="button" class="chip chip--ink">Brand identity</button>
+        <button type="button" class="chip chip--ink">Web &amp; product</button>
+        <button type="button" class="chip chip--ink">Motion &amp; film</button>
+        <button type="button" class="chip chip--ink">Packaging</button>
+        <button type="button" class="chip chip--ink">Art direction</button>
+        <button type="button" class="chip chip--ink">Editorial</button>
+      </div>
+    </div>
+
+    <div class="field"><label>Name</label><input type="text" placeholder="Your full name" /></div>
+    <div class="field"><label>Email</label><input type="email" placeholder="you@company.com" /></div>
+    <div class="field"><label>Company</label><input type="text" placeholder="Brand or business" /></div>
+    <div class="field"><label>Role</label><input type="text" placeholder="Founder, marketing lead, etc." /></div>
+
+    <div class="field full">
+      <label>Budget</label>
+      <div class="chips" data-chip-group="budget">
+        <button type="button" class="chip chip--ink">Under $15k</button>
+        <button type="button" class="chip chip--ink">$15k – $40k</button>
+        <button type="button" class="chip chip--ink">$40k – $90k</button>
+        <button type="button" class="chip chip--ink">$90k+</button>
+        <button type="button" class="chip chip--ink">Retainer</button>
+      </div>
+    </div>
+
+    <div class="field full">
+      <label>Tell us a bit about it</label>
+      <textarea placeholder="What you're building, when you'd like to launch, what success looks like."></textarea>
+    </div>
+
+    <div class="full">
+      <button type="submit" class="contact__send">
+        <span>Send brief</span>
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 13L13 3M13 3H5M13 3V11" stroke="currentColor" stroke-width="1.6" stroke-linecap="square"/></svg>
+      </button>
+    </div>
+  </form>
+</section>
+
+<!-- =========================================================
+     FOOTER
+     ========================================================= -->
+<footer class="footer">
+  <div class="footer__top">
+    <div class="footer__col">
+      <h5>Studio</h5>
+      <p>Northkin is an independent creative studio working with founders, operators, and the occasional restless heritage brand.</p>
+      <p style="margin-top: 16px; color: var(--ink-40);">©2026 Northkin Studio Ltd.</p>
+    </div>
+    <div class="footer__col">
+      <h5>Lisbon HQ</h5>
+      <p><strong>R. Boavista 84</strong></p>
+      <p>1200-068 Lisboa, Portugal</p>
+    </div>
+    <div class="footer__col">
+      <h5>New York</h5>
+      <p><strong>57 Walker St, 4F</strong></p>
+      <p>New York, NY 10013</p>
+    </div>
+    <div class="footer__col">
+      <h5>Contact</h5>
+      <a href="mailto:hello@northkin.studio">hello@northkin.studio</a>
+      <a href="#">Instagram</a>
+      <a href="#">Are.na</a>
+      <a href="#">LinkedIn</a>
+    </div>
+  </div>
+
+  <div class="footer__wordmark" aria-hidden="true">northkin</div>
+
+  <div class="footer__bottom">
+    <span>Built in-house · 2026</span>
+    <span id="footerTime">Lisbon · 00:00</span>
+    <span>No third-party tracking</span>
+  </div>
+</footer>
+
+<!-- =========================================================
+     Scripts — Lenis + GSAP + ScrollTrigger
+     ========================================================= -->
+<script src="https://cdn.jsdelivr.net/npm/lenis@1.1.13/dist/lenis.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+
+<script>
+(function () {
+  const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  gsap.registerPlugin(ScrollTrigger);
+
+  /* -------------------------------------------------------
+     1. Reveal system — add .is-revealed class on scroll into view.
+        A simple CSS transition runs from the prep state defined in CSS.
+     ------------------------------------------------------- */
+
+  /* -------------------------------------------------------
+     2. Lenis smooth scroll
+     ------------------------------------------------------- */
+  const lenis = new Lenis({
+    duration: 1.15,
+    easing: t => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+    smoothWheel: true,
+    smoothTouch: false,
+  });
+  lenis.on('scroll', ScrollTrigger.update);
+  gsap.ticker.add(time => lenis.raf(time * 1000));
+  gsap.ticker.lagSmoothing(0);
+  window.__lenis = lenis;
+
+  // anchors via Lenis
+  document.querySelectorAll('a[href^="#"]').forEach(a => {
+    a.addEventListener('click', e => {
+      const id = a.getAttribute('href');
+      if (id.length < 2) return;
+      const el = document.querySelector(id);
+      if (!el) return;
+      e.preventDefault();
+      lenis.scrollTo(el, { offset: 0, duration: 1.4 });
+    });
+  });
+
+  /* -------------------------------------------------------
+     3. Preloader → hero reveal
+     ------------------------------------------------------- */
+  const preloader = document.getElementById('preloader');
+  const bar = document.getElementById('preloaderBar');
+  const count = document.getElementById('preloaderCount');
+
+  const PRELOADER_DURATION = 3.1; // seconds until preloader has fully exited
+
+  // Preloader timeline (best-effort; the hero reveal does NOT depend on its onComplete)
+  const preTL = gsap.timeline();
+  preTL
+    .fromTo('.preloader__mark span', { yPercent: 110 }, { yPercent: 0, duration: .9, ease: 'expo.out' })
+    .fromTo({ v: 0 }, { v: 0 }, {
+      v: 100,
+      duration: 1.1,
+      ease: 'power2.inOut',
+      onUpdate: function () {
+        const val = Math.round(this.targets()[0].v);
+        if (count) count.textContent = String(val).padStart(2, '0');
+        if (bar) bar.style.width = val + '%';
+      },
+    }, '-=.4')
+    .to('.preloader__mark span', { yPercent: -110, duration: .7, ease: 'expo.in' }, '+=.1')
+    .to(preloader, { yPercent: -100, duration: 1.0, ease: 'expo.inOut' }, '-=.2')
+    .set(preloader, { display: 'none' });
+
+  // Release scroll lock when preloader is done (best-effort).
+  gsap.delayedCall(PRELOADER_DURATION, () => {
+    document.body.classList.remove('is-loading');
+  });
+
+  /* -------------------------------------------------------
+     4. Hero reveal — runs as a single GSAP timeline starting slightly
+        before the preloader finishes exiting. Uses gsap.set() to lock
+        initial state, then gsap.to() for animation — decoupled to avoid
+        any race with ScrollTrigger refresh on fromTo tweens.
+     ------------------------------------------------------- */
+  // Explicit initial state (runs right now, no race with fromTo/refresh)
+  gsap.set('[data-hero-letter]',  { yPercent: 110 });
+  gsap.set('.hero__h1',           { y: 30, opacity: 0 });
+  gsap.set('.hero__statement',    { y: 28, opacity: 0 });
+  gsap.set('.hero__meta > *',     { y: 14, opacity: 0 });
+  gsap.set('.hero__scroll',       { opacity: 0 });
+  gsap.set('.hero__tagline .eyebrow', { y: 14, opacity: 0 });
+
+  const heroDelay = Math.max(0, PRELOADER_DURATION - 1.2);
+  const heroTL = gsap.timeline({ delay: heroDelay, defaults: { ease: 'expo.out' } });
+  heroTL
+    .to('[data-hero-letter]',        { yPercent: 0, duration: 1.2, stagger: { each: .05, from: 'start' } }, 0)
+    .to('.hero__meta > *',           { y: 0, opacity: 1, duration: .8, stagger: .08 }, 0)
+    .to('.hero__tagline .eyebrow',   { y: 0, opacity: 1, duration: .8 }, 0.1)
+    .to('.hero__h1',                 { y: 0, opacity: 1, duration: 1 }, 0.3)
+    .to('.hero__statement',          { y: 0, opacity: 1, duration: 1 }, 0.45)
+    .to('.hero__scroll',             { opacity: 1, duration: .6 }, 0.9);
+
+  /* -------------------------------------------------------
+     5. IntersectionObserver-driven reveals — no GSAP dependency,
+        no race with ScrollTrigger.refresh().
+     ------------------------------------------------------- */
+  const revealTargets = document.querySelectorAll('[data-reveal-up], [data-reveal-words]');
+  if ('IntersectionObserver' in window && !prefersReduced) {
+    const io = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          // slight stagger if siblings hit the viewport together
+          const delay = Math.min(0.18, (entry.target.dataset.revealDelay || 0) * 1);
+          entry.target.style.transitionDelay = delay + 's';
+          entry.target.classList.add('is-revealed');
+          io.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12, rootMargin: '0px 0px -10% 0px' });
+    revealTargets.forEach(el => io.observe(el));
+  } else {
+    revealTargets.forEach(el => el.classList.add('is-revealed'));
+  }
+
+  /* Number counters */
+  document.querySelectorAll('[data-count]').forEach(el => {
+    const target = parseFloat(el.dataset.count);
+    const obj = { v: 0 };
+    gsap.to(obj, {
+      v: target,
+      duration: 2.2,
+      ease: 'power3.out',
+      scrollTrigger: { trigger: el, start: 'top 85%', once: true },
+      onUpdate: () => { el.textContent = Math.round(obj.v); },
+    });
+  });
+
+  /* -------------------------------------------------------
+     6. Pinned horizontal work reel
+     ------------------------------------------------------- */
+  const rail = document.getElementById('workRail');
+  const pin  = document.getElementById('workPin');
+
+  if (rail && pin) {
+    const buildScroll = () => {
+      const padX = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--pad-x')) || 24;
+      const distance = rail.scrollWidth - window.innerWidth + padX * 2;
+      return Math.max(distance, 0);
+    };
+    gsap.to(rail, {
+      x: () => -buildScroll(),
+      ease: 'none',
+      scrollTrigger: {
+        trigger: pin,
+        start: 'top top',
+        end: () => '+=' + buildScroll(),
+        pin: true,
+        scrub: 0.8,
+        invalidateOnRefresh: true,
+        anticipatePin: 1,
+      },
+    });
+    const refresh = () => ScrollTrigger.refresh();
+    window.addEventListener('resize', refresh);
+    document.fonts && document.fonts.ready.then(refresh);
+    window.addEventListener('load', refresh);
+    setTimeout(refresh, 350);
+    setTimeout(refresh, 1100);
+  }
+
+  /* -------------------------------------------------------
+     7. Footer wordmark parallax
+     ------------------------------------------------------- */
+  gsap.to('.footer__wordmark', {
+    y: -60,
+    ease: 'none',
+    scrollTrigger: {
+      trigger: '.footer',
+      start: 'top bottom',
+      end: 'bottom bottom',
+      scrub: true,
+    },
+  });
+
+  /* -------------------------------------------------------
+     8. Custom cursor
+     ------------------------------------------------------- */
+  const cursor = document.getElementById('cursor');
+  if (cursor && !prefersReduced && window.matchMedia('(hover: hover)').matches) {
+    const xTo = gsap.quickTo(cursor, 'x', { duration: 0.18, ease: 'power3.out' });
+    const yTo = gsap.quickTo(cursor, 'y', { duration: 0.18, ease: 'power3.out' });
+
+    window.addEventListener('pointermove', e => {
+      xTo(e.clientX);
+      yTo(e.clientY);
+    });
+
+    // Click state
+    window.addEventListener('pointerdown', () => cursor.classList.add('is-down'));
+    window.addEventListener('pointerup',   () => cursor.classList.remove('is-down'));
+
+    // Hover classes for interactive elements
+    const interactiveSel = 'a, button, .chip, .services__row, .clients__cell, [data-cursor]';
+    document.querySelectorAll(interactiveSel).forEach(el => {
+      const mode = el.getAttribute('data-cursor');
+      el.addEventListener('pointerenter', () => {
+        cursor.classList.remove('is-text', 'is-media');
+        if (mode === 'media') cursor.classList.add('is-media');
+        else cursor.classList.add('is-hover');
+      });
+      el.addEventListener('pointerleave', () => {
+        cursor.classList.remove('is-hover', 'is-text', 'is-media');
+      });
+    });
+
+    // Text cursor on inputs
+    document.querySelectorAll('input, textarea').forEach(el => {
+      el.addEventListener('pointerenter', () => cursor.classList.add('is-text'));
+      el.addEventListener('pointerleave', () => cursor.classList.remove('is-text'));
+    });
+
+    // pointerenter/leave don't fire on scroll — clear hover state so
+    // scrolling past a card doesn't strand the cursor in "View" mode.
+    lenis.on('scroll', () => cursor.classList.remove('is-hover', 'is-text', 'is-media'));
+  }
+
+  /* -------------------------------------------------------
+     9. Chip toggles in form
+     ------------------------------------------------------- */
+  document.querySelectorAll('[data-chip-group]').forEach(group => {
+    group.addEventListener('click', e => {
+      const btn = e.target.closest('.chip');
+      if (!btn) return;
+      const multi = group.dataset.chipGroup === 'services';
+      if (!multi) group.querySelectorAll('.chip').forEach(c => c.classList.remove('chip--active'));
+      btn.classList.toggle('chip--active');
+    });
+  });
+
+  /* -------------------------------------------------------
+     10. Lisbon clock
+     ------------------------------------------------------- */
+  function updateClock() {
+    try {
+      const fmt = new Intl.DateTimeFormat('en-GB', {
+        timeZone: 'Europe/Lisbon',
+        hour: '2-digit', minute: '2-digit', hour12: false,
+      });
+      const t = fmt.format(new Date());
+      const a = document.getElementById('navClock');
+      const b = document.getElementById('footerTime');
+      if (a) a.textContent = t;
+      if (b) b.textContent = 'Lisbon · ' + t;
+    } catch (e) { /* ignore */ }
+  }
+  updateClock();
+  setInterval(updateClock, 30000);
+
+})();
+</script>
+
+</body>
+</html>
