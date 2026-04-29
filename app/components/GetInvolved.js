@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import { useEffect, useRef, useState } from 'react';
 import { gsap } from 'gsap';
 import { ensureGsap, isReducedMotion, EASE, DUR } from '../lib/reveal';
@@ -302,7 +303,7 @@ export default function GetInvolved() {
 
         <div className="donate__cards">
           {CARDS.slice(1).map((c) => (
-            <a
+            <Link
               key={c.index}
               href={c.href}
               className="donate__card"
@@ -318,7 +319,7 @@ export default function GetInvolved() {
               <h3 className="donate__card-title">{c.title}</h3>
               <p className="donate__card-body">{c.body}</p>
               <span className="donate__card-cta">{c.cta}</span>
-            </a>
+            </Link>
           ))}
 
           <div className="donate__pledge" data-spotlight>

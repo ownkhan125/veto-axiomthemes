@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import { Fragment, useEffect, useRef } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
@@ -127,7 +128,7 @@ export default function Issues() {
 
     const refresh = () => ScrollTrigger.refresh();
     window.addEventListener('resize', refresh);
-    if (document.fonts && document.fonts.ready) document.fonts.ready.then(refresh);
+    document.fonts?.ready?.then(refresh);
     const t1 = setTimeout(refresh, 400);
     const t2 = setTimeout(refresh, 1200);
 
@@ -135,7 +136,7 @@ export default function Issues() {
       window.removeEventListener('resize', refresh);
       clearTimeout(t1);
       clearTimeout(t2);
-      tween.scrollTrigger && tween.scrollTrigger.kill();
+      tween.scrollTrigger?.kill();
       tween.kill();
     };
   }, []);
@@ -164,7 +165,7 @@ export default function Issues() {
             ))}
           </h2>
         </div>
-        <a href="/events" data-cursor="link">View all events <span>→</span></a>
+        <Link href="/events" data-cursor="link">View all events <span>→</span></Link>
       </div>
 
       <div className="issues__pin" ref={pinRef}>
@@ -176,12 +177,12 @@ export default function Issues() {
       </div>
 
       <div className="issues__foot">
-        <a href="/events" className="issues__foot-cta" data-cursor="hover">
+        <Link href="/events" className="issues__foot-cta" data-cursor="hover">
           View All Events
           <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true">
             <path d="M3 13L13 3M13 3H5M13 3V11" stroke="currentColor" strokeWidth="1.7" strokeLinecap="square" />
           </svg>
-        </a>
+        </Link>
       </div>
     </section>
   );

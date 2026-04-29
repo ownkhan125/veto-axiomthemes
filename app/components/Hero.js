@@ -44,7 +44,6 @@ const GRID_LINES = shuffleSeeded([
 ]);
 
 export default function Hero() {
-  const h1Ref       = useRef(null);
   const linesRef    = useRef([]);
   const ornamentRef = useRef(null);
   const thumbRef    = useRef(null);
@@ -154,7 +153,7 @@ export default function Hero() {
       </div>
 
       <div className="hero__layout">
-        <h1 className="hero__h1" ref={h1Ref} aria-label={HEADING_LINES.join(' ')}>
+        <h1 className="hero__h1" aria-label={HEADING_LINES.join(' ')}>
           {HEADING_LINES.map((line, i) => {
             const isOrnamentLine = i === 1; // after ISSUES
             const isThumbLine    = i === 2; // before DRIVING

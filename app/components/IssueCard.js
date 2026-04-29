@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import { useRef } from 'react';
 import { motion, useMotionValue, useSpring, useTransform } from 'motion/react';
 
@@ -88,9 +89,9 @@ export default function IssueCard({ event, index }) {
           <span className="card__date-month">{eventMonth}</span>
         </div>
 
-        <a href="/events" className="card__cta">
+        <Link href="/events" className="card__cta">
           {event.cta} →
-        </a>
+        </Link>
 
         <div className="card__meta">
           <div className="card__meta-top">

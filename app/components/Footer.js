@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import { useEffect, useRef, useState } from 'react';
 import { gsap } from 'gsap';
 import { ensureGsap, isReducedMotion, EASE, DUR } from '../lib/reveal';
@@ -95,18 +96,18 @@ export default function Footer() {
           <h3 className="footer__cta-title">A Senate seat earned, not bought.</h3>
         </div>
         <div className="footer__cta-actions">
-          <a href="#volunteer" className="footer__cta-btn footer__cta-btn--primary">
+          <Link href="#volunteer" className="footer__cta-btn footer__cta-btn--primary">
             Volunteer
-          </a>
-          <a href="#donate" className="footer__cta-btn footer__cta-btn--ghost">
+          </Link>
+          <Link href="#donate" className="footer__cta-btn footer__cta-btn--ghost">
             Contribute
-          </a>
+          </Link>
         </div>
       </div>
 
       <div className="footer__top">
         <div className="footer__col footer__col--brand">
-          <a href="#top" className="footer__brand">veto<span>·</span></a>
+          <Link href="#top" className="footer__brand">veto<span>·</span></Link>
           <p className="footer__lede">
             The U.S. Senate campaign of Alex Reyna — an independent, people-funded run to represent
             Nevada in the 119th Congress.
@@ -135,19 +136,19 @@ export default function Footer() {
 
         <div className="footer__col">
           <h5>Campaign</h5>
-          <a href="#issues">Issues</a>
-          <a href="#manifesto">Manifesto</a>
-          <a href="#priorities">Priorities</a>
-          <a href="#endorsements">Endorsements</a>
-          <a href="#metrics">Transparency</a>
+          <Link href="#issues">Issues</Link>
+          <Link href="#manifesto">Manifesto</Link>
+          <Link href="#priorities">Priorities</Link>
+          <Link href="#endorsements">Endorsements</Link>
+          <Link href="#metrics">Transparency</Link>
         </div>
 
         <div className="footer__col">
           <h5>Contact</h5>
           <a href="mailto:hello@vetocampaign.org">hello@vetocampaign.org</a>
           <a href="#">Press inquiries</a>
-          <a href="#volunteer">Volunteer</a>
-          <a href="#donate">Contribute</a>
+          <Link href="#volunteer">Volunteer</Link>
+          <Link href="#donate">Contribute</Link>
         </div>
       </div>
 

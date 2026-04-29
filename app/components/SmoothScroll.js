@@ -27,7 +27,7 @@ export default function SmoothScroll() {
 
     // Anchor links go through Lenis
     const anchorHandler = (e) => {
-      const a = e.target.closest && e.target.closest('a[href^="#"]');
+      const a = e.target.closest?.('a[href^="#"]');
       if (!a) return;
       const id = a.getAttribute('href');
       if (!id || id.length < 2) return;
@@ -39,9 +39,7 @@ export default function SmoothScroll() {
     document.addEventListener('click', anchorHandler);
 
     // Trigger one ScrollTrigger.refresh after fonts load so pins pick up final layout
-    if (document.fonts && document.fonts.ready) {
-      document.fonts.ready.then(() => ScrollTrigger.refresh());
-    }
+    document.fonts?.ready?.then(() => ScrollTrigger.refresh());
     const t1 = setTimeout(() => ScrollTrigger.refresh(), 400);
     const t2 = setTimeout(() => ScrollTrigger.refresh(), 1200);
 
