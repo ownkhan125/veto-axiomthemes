@@ -208,18 +208,18 @@ export default function Volunteer() {
         );
       }
 
-      // ---- Bottom-row sequence ----
-      //   The form fields, chips, submit, and live-feed all live inside
-      //   .volunteer__bottom and are staged on a *dedicated* timeline keyed off
-      //   that container's viewport entry. This guarantees they animate the
-      //   moment the bottom row is on screen — never queued behind the
-      //   header/way-card timeline, which can fire much earlier on tall layouts.
+      // ---- Bottom-row staged volunteer-form entrance ----
+      //   Stage 1 — frame edges trace clockwise around the form
+      //   Stage 2 — fields fade up + live feed glides in (parallel)
+      //   Stage 3 — chips pop, submit lifts with a soft activation pulse
       const live = section.querySelector('.volunteer__live');
+      const formEl = section.querySelector('.volunteer__form');
+      const formEdges = section.querySelectorAll('[data-vol-form-edge]');
       if (bottom && (fields.length || chips.length || sendBtn || live)) {
         // Pre-arm so there's no flash before the bottom-row trigger fires.
         if (fields.length) gsap.set(fields, { opacity: 0, y: 18 });
-        if (chips.length)  gsap.set(chips,  { opacity: 0, y: 8, scale: 0.95 });
-        if (sendBtn)       gsap.set(sendBtn, { opacity: 0, y: 12 });
+        if (chips.length)  gsap.set(chips,  { opacity: 0, y: 8, scale: 0.92 });
+        if (sendBtn)       gsap.set(sendBtn, { opacity: 0, y: 14, scale: 0.94 });
         if (live)          gsap.set(live,    { opacity: 0, y: 24, scale: 0.98 });
 
         const btl = gsap.timeline({
@@ -231,44 +231,56 @@ export default function Volunteer() {
           },
         });
 
-        // 1) Form fields rise in a tight stagger, starting almost immediately
-        //    after the bg wipe begins so the section feels assembled, not stalled.
+        // Stage 1 — frame draws clockwise (top, right, bottom, left)
+        if (formEdges.length === 4) {
+          btl.to(formEdges[0], { scaleX: 1, duration: 0.5, ease: 'power3.out' }, 0)
+             .to(formEdges[1], { scaleY: 1, duration: 0.5, ease: 'power3.out' }, 0.16)
+             .to(formEdges[2], { scaleX: 1, duration: 0.5, ease: 'power3.out' }, 0.32)
+             .to(formEdges[3], { scaleY: 1, duration: 0.5, ease: 'power3.out' }, 0.48);
+        }
+
+        // Stage 2 — fields rise; live feed enters in parallel
         if (fields.length) {
           btl.to(fields, {
             opacity: 1, y: 0,
-            duration: 0.45,
-            stagger: 0.035,
+            duration: 0.5,
+            stagger: 0.04,
             ease: 'power3.out',
-          }, 0.1);
+            onStart: () => {
+              fields.forEach((f, i) => {
+                setTimeout(() => f.setAttribute('data-traced', 'true'), i * 40);
+              });
+            },
+          }, 0.85);
         }
-
-        // 2) Live feed glides in PARALLEL with the form fields — both columns
-        //    of the bottom row arrive together, no left-then-right wait.
         if (live) {
           btl.to(live, {
             opacity: 1, y: 0, scale: 1,
-            duration: 0.6,
+            duration: 0.65,
             ease: 'power3.out',
-          }, 0.1);
+          }, 0.85);
         }
 
-        // 3) Chips pop in just as the last fields settle.
+        // Stage 3 — chips pop, submit lifts with activation pulse
         if (chips.length) {
           btl.to(chips, {
             opacity: 1, y: 0, scale: 1,
-            duration: 0.3,
+            duration: 0.35,
             stagger: 0.025,
-            ease: 'back.out(1.4)',
-          }, '-=0.2');
+            ease: 'back.out(1.5)',
+          }, '>-0.05');
         }
-
-        // 4) Submit button lifts last — a clean punctuation mark.
         if (sendBtn) {
           btl.to(sendBtn, {
-            opacity: 1, y: 0,
-            duration: 0.35,
-            ease: 'power3.out',
-          }, '-=0.15');
+            opacity: 1, y: 0, scale: 1,
+            duration: 0.45,
+            ease: 'back.out(1.6)',
+          }, '<0.05');
+          btl.fromTo(sendBtn,
+            { boxShadow: '0 0 0 0 rgba(255,90,31,0)' },
+            { boxShadow: '0 0 0 14px rgba(255,90,31,0)', duration: 0.85, ease: 'power2.out' },
+            '<0.1'
+          );
         }
       }
     }, section);
@@ -315,6 +327,12 @@ export default function Volunteer() {
           </div>
         ) : (
           <form className="volunteer__form" onSubmit={submit} noValidate={false}>
+            <span className="volunteer__form-frame" aria-hidden="true">
+              <span className="volunteer__form-frame-edge volunteer__form-frame-edge--t" data-vol-form-edge />
+              <span className="volunteer__form-frame-edge volunteer__form-frame-edge--r" data-vol-form-edge />
+              <span className="volunteer__form-frame-edge volunteer__form-frame-edge--b" data-vol-form-edge />
+              <span className="volunteer__form-frame-edge volunteer__form-frame-edge--l" data-vol-form-edge />
+            </span>
             <div className="volunteer__field">
               <label htmlFor="vol-first">First name</label>
               <input id="vol-first" type="text" placeholder="Jane" required autoComplete="given-name" />

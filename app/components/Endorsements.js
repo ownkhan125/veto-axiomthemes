@@ -171,8 +171,7 @@ export default function Endorsements() {
 
       <div className="endorse__grid" role="list">
         {CELLS.map((c) => (
-          <a
-            href="#"
+          <div
             className="endorse__cell"
             role="listitem"
             key={c.name}
@@ -183,7 +182,7 @@ export default function Endorsements() {
               {c.name}
               <small>{c.tag}</small>
             </span>
-          </a>
+          </div>
         ))}
       </div>
 

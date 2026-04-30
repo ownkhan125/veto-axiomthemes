@@ -5,52 +5,22 @@ import { Fragment, useEffect, useRef } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import IssueCard from './IssueCard';
+import { EVENTS as ALL_EVENTS } from '../lib/events-data';
 
 const INTRO_HEADING = 'Join the campaign on the road.';
 
-// Events content — same card structure as before, only the data changed.
-const EVENTS = [
-  {
-    image: 'https://picsum.photos/800/500?random=1',
-    tag: 'Community Meetup',
-    date: 'Apr 24',
-    title: 'Astoria Warrenton Crab & Wine Fest',
-    location: 'Clatsop County Fair and Expo Center, 92937 Walluski Loop, Astoria',
-    cta: 'RSVP',
-  },
-  {
-    image: 'https://picsum.photos/800/500?random=2',
-    tag: 'Town Hall',
-    date: 'May 3',
-    title: 'District Community Town Hall — Open Q&A',
-    location: 'Hillsboro Civic Center, 150 E Main St, Hillsboro, OR',
-    cta: 'RSVP',
-  },
-  {
-    image: 'https://picsum.photos/800/500?random=3',
-    tag: 'Fundraiser',
-    date: 'May 10',
-    title: 'Spring Campaign Fundraiser Dinner',
-    location: 'The Governor Hotel, 614 SW 11th Ave, Portland, OR',
-    cta: 'RSVP',
-  },
-  {
-    image: 'https://picsum.photos/800/500?random=4',
-    tag: 'Volunteer Event',
-    date: 'May 17',
-    title: "Canvassing Day — Oregon's 1st District",
-    location: 'Campaign HQ, PO Box 238, Gaston, OR 97119',
-    cta: 'RSVP',
-  },
-  {
-    image: 'https://picsum.photos/800/500?random=5',
-    tag: 'Community Meetup',
-    date: 'May 25',
-    title: 'Memorial Day Community Parade & Gathering',
-    location: 'Forest Grove Downtown, Pacific Ave, Forest Grove, OR',
-    cta: 'RSVP',
-  },
-];
+// Pull from the shared catalogue so the homepage cards route to the same
+// detail pages used by /events/[slug]. The first five give us the same five
+// cards that were here before the listing page existed.
+const EVENTS = ALL_EVENTS.slice(0, 5).map((e, i) => ({
+  slug: e.slug,
+  image: `https://picsum.photos/800/500?random=${i + 1}`,
+  tag: e.tag,
+  date: e.date,
+  title: e.title,
+  location: `${e.venue}, ${e.address}`,
+  cta: 'RSVP',
+}));
 
 export default function Issues() {
   const pinRef     = useRef(null);
@@ -171,7 +141,7 @@ export default function Issues() {
       <div className="issues__pin" ref={pinRef}>
         <div className="issues__rail" ref={railRef}>
           {EVENTS.map((event, i) => (
-            <IssueCard key={i} index={i} event={event} />
+            <IssueCard key={event.slug} index={i} event={event} />
           ))}
         </div>
       </div>

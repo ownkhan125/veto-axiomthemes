@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { useEffect, useRef, useState } from 'react';
 import { gsap } from 'gsap';
 import { ensureGsap, isReducedMotion, EASE, DUR } from '../lib/reveal';
+import Counter from './internal/Counter';
 
 const TIERS = [
   { amount: 25, impact: '1 day of doors knocked in a swing precinct.' },
@@ -338,7 +339,12 @@ export default function GetInvolved() {
       <div className="donate__stats">
         {STATS.map((s) => (
           <div key={s.label} className="donate__stat">
-            <div className="donate__stat-value">{s.value}</div>
+            <Counter
+              value={s.value}
+              className="donate__stat-value"
+              duration={1.8}
+              start="top 90%"
+            />
             <div className="donate__stat-label">{s.label}</div>
           </div>
         ))}

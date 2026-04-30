@@ -33,6 +33,7 @@ export default function IssueCard({ event, index }) {
   };
 
   const [eventMonth, eventDay] = (event.date || '').split(' ');
+  const href = event.slug ? `/events/${event.slug}` : '/events';
 
   return (
     <motion.article
@@ -89,7 +90,16 @@ export default function IssueCard({ event, index }) {
           <span className="card__date-month">{eventMonth}</span>
         </div>
 
-        <Link href="/events" className="card__cta">
+        {/* Full-card cover Link — captures clicks anywhere on the card and
+            routes to the detail page. Sits above the artwork but below the
+            visible CTA so the pill keeps its own click affordance. */}
+        <Link
+          href={href}
+          className="card__cover"
+          aria-label={`${event.title} — view details`}
+        />
+
+        <Link href={href} className="card__cta">
           {event.cta} →
         </Link>
 

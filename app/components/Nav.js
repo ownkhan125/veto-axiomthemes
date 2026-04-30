@@ -5,19 +5,22 @@ import { useState, useEffect } from 'react';
 import { AnimatePresence, motion } from 'motion/react';
 
 const DESKTOP_LEFT = [
-  { href: '#platform', label: 'Platform' },
-  { href: '#about',    label: 'About' },
+  { href: '/about',         label: 'About' },
+  { href: '/ask',           label: 'Ask' },
+  { href: '/endorsements',  label: 'Endorsements' },
 ];
 const DESKTOP_RIGHT = [
-  { href: '#events',    label: 'Events' },
-  { href: '#volunteer', label: 'Volunteer' },
+  { href: '/events',    label: 'Events' },
+  { href: '/volunteer', label: 'Volunteer' },
 ];
 // Full menu used on mobile — keeps all the same links available in one place.
 const MOBILE_LINKS = [
-  { href: '#platform',  label: 'Platform' },
-  { href: '#about',     label: 'About' },
-  { href: '#events',    label: 'Events' },
-  { href: '#volunteer', label: 'Volunteer' },
+  { href: '/about',        label: 'About' },
+  { href: '/events',       label: 'Events' },
+  { href: '/volunteer',    label: 'Volunteer' },
+  { href: '/endorsements', label: 'Endorsements' },
+  { href: '/ask',          label: 'Ask a Question' },
+  { href: '/contact',      label: 'Contact' },
 ];
 
 const ArrowUpRight = ({ size = 10 }) => (
@@ -54,7 +57,7 @@ export default function Nav() {
           ))}
         </div>
 
-        <Link href="#top" className="nav__brand" aria-label="Veto — home">
+        <Link href="/" className="nav__brand" aria-label="Veto — home">
           veto<sup>®</sup>
         </Link>
 
@@ -62,7 +65,7 @@ export default function Nav() {
           {DESKTOP_RIGHT.map(l => (
             <Link key={l.href} href={l.href} className="nav__link">{l.label}</Link>
           ))}
-          <Link href="#involved" className="nav__cta" data-cursor="hover">
+          <Link href="/#involved" className="nav__cta" data-cursor="hover">
             Donate<ArrowUpRight />
           </Link>
         </div>
@@ -95,7 +98,7 @@ export default function Nav() {
             transition={{ duration: 0.6, ease: [0.76, 0, 0.24, 1] }}
           >
             <div className="nav-menu__top">
-              <Link href="#top" className="nav__brand" onClick={close} aria-label="Veto — home">
+              <Link href="/" className="nav__brand" onClick={close} aria-label="Veto — home">
                 veto<sup>®</sup>
               </Link>
               <button
@@ -133,7 +136,7 @@ export default function Nav() {
               exit={{ opacity: 0, transition: { duration: 0.2 } }}
               transition={{ delay: 0.55, duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
             >
-              <Link href="#involved" className="nav-menu__cta" onClick={close} data-cursor="hover">
+              <Link href="/#involved" className="nav-menu__cta" onClick={close} data-cursor="hover">
                 Donate<ArrowUpRight size={12} />
               </Link>
               <a href="mailto:hello@vetocampaign.org" className="nav-menu__email" onClick={close}>

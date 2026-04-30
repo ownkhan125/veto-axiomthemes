@@ -96,10 +96,10 @@ export default function Footer() {
           <h3 className="footer__cta-title">A Senate seat earned, not bought.</h3>
         </div>
         <div className="footer__cta-actions">
-          <Link href="#volunteer" className="footer__cta-btn footer__cta-btn--primary">
+          <Link href="/volunteer" className="footer__cta-btn footer__cta-btn--primary">
             Volunteer
           </Link>
-          <Link href="#donate" className="footer__cta-btn footer__cta-btn--ghost">
+          <Link href="/#involved" className="footer__cta-btn footer__cta-btn--ghost">
             Contribute
           </Link>
         </div>
@@ -107,16 +107,16 @@ export default function Footer() {
 
       <div className="footer__top">
         <div className="footer__col footer__col--brand">
-          <Link href="#top" className="footer__brand">veto<span>·</span></Link>
+          <Link href="/" className="footer__brand">veto<span>·</span></Link>
           <p className="footer__lede">
             The U.S. Senate campaign of Alex Reyna — an independent, people-funded run to represent
             Nevada in the 119th Congress.
           </p>
           <ul className="footer__social" aria-label="Social media">
-            <li><a href="#" aria-label="Instagram">IG</a></li>
-            <li><a href="#" aria-label="YouTube">YT</a></li>
-            <li><a href="#" aria-label="TikTok">TT</a></li>
-            <li><a href="#" aria-label="X / Twitter">X</a></li>
+            <li><a href="https://instagram.com/" target="_blank" rel="noopener noreferrer" aria-label="Instagram">IG</a></li>
+            <li><a href="https://youtube.com/" target="_blank" rel="noopener noreferrer" aria-label="YouTube">YT</a></li>
+            <li><a href="https://tiktok.com/" target="_blank" rel="noopener noreferrer" aria-label="TikTok">TT</a></li>
+            <li><a href="https://x.com/" target="_blank" rel="noopener noreferrer" aria-label="X / Twitter">X</a></li>
           </ul>
         </div>
 
@@ -136,19 +136,19 @@ export default function Footer() {
 
         <div className="footer__col">
           <h5>Campaign</h5>
-          <Link href="#issues">Issues</Link>
-          <Link href="#manifesto">Manifesto</Link>
-          <Link href="#priorities">Priorities</Link>
-          <Link href="#endorsements">Endorsements</Link>
-          <Link href="#metrics">Transparency</Link>
+          <Link href="/about">About</Link>
+          <Link href="/events">Events</Link>
+          <Link href="/endorsements">Endorsements</Link>
+          <Link href="/ask">Ask a Question</Link>
+          <Link href="/#priorities">Priorities</Link>
         </div>
 
         <div className="footer__col">
           <h5>Contact</h5>
+          <Link href="/contact">Get in touch</Link>
           <a href="mailto:hello@vetocampaign.org">hello@vetocampaign.org</a>
-          <a href="#">Press inquiries</a>
-          <Link href="#volunteer">Volunteer</Link>
-          <Link href="#donate">Contribute</Link>
+          <Link href="/volunteer">Volunteer</Link>
+          <Link href="/#involved">Contribute</Link>
         </div>
       </div>
 
@@ -163,8 +163,8 @@ export default function Footer() {
         <div className="footer__bottom-right">
           <span>© 2026 Reyna for Nevada</span>
           <span className="footer__sep" aria-hidden="true">/</span>
-          <a href="#">Privacy</a>
-          <a href="#">Terms</a>
+          <Link href="/privacy">Privacy</Link>
+          <Link href="/terms">Terms</Link>
         </div>
       </div>
 
