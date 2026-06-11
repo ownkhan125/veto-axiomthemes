@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>veto — story 06 · issue vertical</title>
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:ital,wght@0,400;0,500;0,600;0,700;0,800;1,300&family=Fraunces:ital,opsz,wght@1,72,300;1,72,400&display=swap" rel="stylesheet">
+<style>
+  :root{--paper:#EFEAE0;--paper-2:#D4CBB4;--ink:#0A0A0A;--ink-50:#6B6457;--accent:#FF5A1F;
+    --serif:'Fraunces',serif;--sans:'Inter Tight',sans-serif;}
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{background:#161616;min-height:100vh;display:grid;place-items:center;padding:24px;font-family:var(--sans);color:var(--ink);}
+  .stage{position:relative;width:1080px;height:1920px;overflow:hidden;background:var(--paper);box-shadow:0 60px 120px -30px rgba(0,0,0,.65);perspective:1500px;}
+  @media(max-width:1180px){.stage{transform:scale(calc((100vw - 48px)/1080));transform-origin:top center}}
+
+  .lite{position:absolute;inset:0;pointer-events:none;
+    background:
+      radial-gradient(50% 30% at 25% 8%, rgba(255,228,190,.85), transparent 60%),
+      radial-gradient(70% 50% at 95% 95%, rgba(60,40,20,.28), transparent 60%),
+      linear-gradient(180deg,var(--paper),var(--paper-2));}
+  .grain{position:absolute;inset:0;opacity:.36;mix-blend-mode:multiply;pointer-events:none;
+    background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='240' height='240'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 .45 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");}
+
+  /* BACKGROUND big numeral */
+  .bg{position:absolute;left:50%;top:42%;transform:translate(-50%,-50%);font:800 1200px/.78 var(--sans);letter-spacing:-.07em;color:transparent;-webkit-text-stroke:1.4px rgba(10,10,10,.14);pointer-events:none;}
+
+  /* TOP CHROME */
+  .top{position:absolute;left:64px;right:64px;top:72px;display:flex;justify-content:space-between;font:500 13px/1 var(--sans);letter-spacing:.22em;text-transform:uppercase;color:var(--ink);}
+  .top .l{display:flex;gap:14px;align-items:center;}
+  .top .l::before{content:"";width:34px;height:1px;background:currentColor;}
+  .top .r{color:var(--ink-50);}
+  .hr{position:absolute;left:64px;right:64px;top:122px;height:1px;background:rgba(10,10,10,.18);}
+
+  /* PERSPECTIVE CARD STACK in center — like a print issue */
+  .scene{position:absolute;left:50%;top:280px;width:680px;height:980px;transform:translateX(-50%) rotateX(4deg);transform-style:preserve-3d;}
+  .shadow{position:absolute;left:50%;bottom:-40px;width:620px;height:80px;transform:translateX(-50%);background:radial-gradient(60% 100% at 50% 0%,rgba(0,0,0,.5),transparent 70%);filter:blur(14px);}
+  .issue{position:absolute;inset:0;background:linear-gradient(180deg,#fff 0%,#dccfb1 100%);
+    box-shadow:0 60px 100px -20px rgba(0,0,0,.45),0 1px 0 rgba(255,255,255,.6) inset;padding:60px 56px;color:#0A0A0A;
+    transform:rotate(-2deg);}
+  /* dotted top border */
+  .issue .perf{position:absolute;left:0;right:0;top:24px;height:14px;background-image:radial-gradient(circle, rgba(10,10,10,.45) 28%, transparent 30%);background-size:18px 14px;mix-blend-mode:multiply;}
+  .issue .nu{font:500 12px/1 var(--sans);letter-spacing:.22em;text-transform:uppercase;color:#3F3F3F;display:flex;justify-content:space-between;}
+  .issue .num{margin-top:14px;font:italic 300 280px/.84 var(--serif);letter-spacing:-.04em;color:var(--ink);}
+  .issue .num .dot{color:var(--accent);}
+  .issue .h{margin-top:20px;font:600 56px/1.02 var(--sans);letter-spacing:-.018em;color:var(--ink);max-width:14ch;}
+  .issue .ipsum{margin-top:24px;font:400 16px/1.55 var(--sans);color:var(--ink-50);max-width:34ch;}
+  .issue .pills{margin-top:32px;display:flex;gap:8px;flex-wrap:wrap;}
+  .issue .pills .p{font:500 11px/1 var(--sans);letter-spacing:.18em;text-transform:uppercase;border:1px solid rgba(10,10,10,.4);border-radius:99px;padding:9px 14px;color:var(--ink);}
+  .issue .pills .p.solid{background:var(--ink);color:#F2EFE7;border-color:var(--ink);}
+  .issue .seal{position:absolute;right:50px;bottom:50px;width:110px;height:110px;border-radius:50%;border:1px solid var(--ink);display:grid;place-items:center;color:var(--ink);font:italic 300 38px/1 var(--serif);transform:rotate(-10deg);}
+  .issue .seal::before{content:"";position:absolute;inset:8px;border-radius:50%;border:1px dashed rgba(0,0,0,.4);}
+
+  /* BACK CARD peeking */
+  .behind{position:absolute;left:50%;top:30px;width:680px;height:980px;background:linear-gradient(180deg,#e8dec3,#a89d80);transform:translateX(-50%) rotate(3deg) translateY(10px);box-shadow:0 40px 80px -20px rgba(0,0,0,.4);}
+
+  /* BOTTOM block */
+  .bottom{position:absolute;left:64px;right:64px;bottom:140px;}
+  .bottom .h{font:600 28px/1.08 var(--sans);letter-spacing:-.014em;color:var(--ink);}
+  .bottom .ipsum{margin-top:14px;font:400 14px/1.55 var(--sans);color:var(--ink-50);max-width:42ch;}
+
+  .foot{position:absolute;left:64px;right:64px;bottom:60px;display:flex;justify-content:space-between;align-items:center;font:500 12px/1 var(--sans);letter-spacing:.22em;text-transform:uppercase;color:var(--ink-50);}
+  .foot .swatch{display:inline-block;width:10px;height:10px;border-radius:99px;background:var(--accent);box-shadow:0 0 0 4px rgba(255,90,31,.18);vertical-align:-1px;margin-right:10px;}
+</style>
+</head>
+<body>
+  <div class="stage" role="img" aria-label="issue vertical">
+    <div class="lite"></div>
+    <h2 class="bg" aria-hidden="true">02</h2>
+
+    <header class="top">
+      <span class="l">Issue · 02 of 06</span>
+      <span class="r">N° 06 / 10</span>
+    </header>
+    <span class="hr"></span>
+
+    <div class="scene" aria-hidden="true">
+      <div class="behind"></div>
+      <article class="issue">
+        <span class="perf"></span>
+        <div class="nu"><span>Capitolium · Lorem</span><span>02 / 06</span></div>
+        <div class="num">02<span class="dot">.</span></div>
+        <h3 class="h">Lorem ipsum dolor sit amet consectetur.</h3>
+        <p class="ipsum">Adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+        <div class="pills">
+          <span class="p solid">Lorem →</span>
+          <span class="p">Dolor sit</span>
+          <span class="p">Amet</span>
+        </div>
+        <span class="seal">vt</span>
+      </article>
+    </div>
+
+    <footer class="bottom">
+      <h4 class="h">Lorem ipsum dolor sit, amet <em>consectetur</em>.</h4>
+      <p class="ipsum">Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea.</p>
+    </footer>
+
+    <div class="foot">
+      <span><span class="swatch"></span>Live · session</span>
+      <span>N° 06 / 10</span>
+    </div>
+
+    <div class="grain"></div>
+  </div>
+</body>
+</html>

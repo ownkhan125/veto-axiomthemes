@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>veto — social campaign · index</title>
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:ital,wght@0,400;0,500;0,600;0,700;0,800;1,300&family=Fraunces:ital,opsz,wght@1,72,300;1,72,400&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#EFEAE0;--ink:#0A0A0A;--ink-50:#6B6457;--ink-30:#BFBFBF;--accent:#FF5A1F;
+    --serif:'Fraunces',serif;--sans:'Inter Tight',sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{background:var(--paper);color:var(--ink);font-family:var(--sans);min-height:100vh;}
+  body{padding:64px clamp(20px,4vw,88px) 120px;}
+
+  /* HEADER */
+  header.top{display:flex;justify-content:space-between;align-items:baseline;padding-bottom:24px;border-bottom:1px solid rgba(10,10,10,.18);}
+  header.top .l{display:flex;gap:14px;align-items:center;font:500 12px/1 var(--sans);letter-spacing:.22em;text-transform:uppercase;color:var(--ink);}
+  header.top .l::before{content:"";width:32px;height:1px;background:currentColor;}
+  header.top .r{display:flex;gap:18px;align-items:center;font:500 11px/1 var(--sans);letter-spacing:.22em;text-transform:uppercase;color:var(--ink-50);}
+  header.top .r .dot{display:inline-block;width:10px;height:10px;border-radius:99px;background:var(--accent);box-shadow:0 0 0 4px rgba(255,90,31,.18);}
+
+  /* HERO */
+  .hero{padding:56px 0 64px;display:grid;grid-template-columns:1.4fr 1fr;gap:48px;align-items:end;}
+  .hero h1{font:800 clamp(72px,12vw,180px)/.84 var(--sans);letter-spacing:-.045em;color:var(--ink);}
+  .hero h1 em{font:italic 300 .98em/.84 var(--serif);color:var(--accent);letter-spacing:-.022em;}
+  .hero .lede{font:400 clamp(17px,1.4vw,20px)/1.55 var(--sans);color:var(--ink-50);max-width:46ch;}
+  .hero .lede + .meta{margin-top:20px;font:500 11px/1 var(--sans);letter-spacing:.22em;text-transform:uppercase;color:var(--ink);display:flex;gap:14px;align-items:center;}
+  .hero .lede + .meta::before{content:"";width:32px;height:1px;background:currentColor;}
+
+  /* SECTION HEADER */
+  .sec{display:flex;justify-content:space-between;align-items:baseline;border-top:1px solid rgba(10,10,10,.2);padding:36px 0 24px;margin-top:48px;}
+  .sec h2{font:600 clamp(28px,3vw,40px)/1.04 var(--sans);letter-spacing:-.014em;color:var(--ink);}
+  .sec h2 em{font:italic 300 .88em/1 var(--serif);color:var(--accent);}
+  .sec .ct{font:500 11px/1 var(--sans);letter-spacing:.22em;text-transform:uppercase;color:var(--ink-50);}
+
+  /* GRID */
+  .grid{display:grid;gap:28px;}
+  .grid.posts{grid-template-columns:repeat(auto-fill,minmax(280px,1fr));}
+  .grid.stories{grid-template-columns:repeat(auto-fill,minmax(220px,1fr));}
+
+  /* CARD */
+  .card{display:block;position:relative;text-decoration:none;color:inherit;transition:transform .34s cubic-bezier(.22,.61,.36,1);}
+  .card:hover{transform:translateY(-6px);}
+  .thumb{position:relative;width:100%;background:#fff;overflow:hidden;border:1px solid rgba(10,10,10,.12);box-shadow:0 30px 60px -20px rgba(10,10,10,.25);}
+  .card.post .thumb{aspect-ratio:1/1;}
+  .card.story .thumb{aspect-ratio:9/16;}
+  .thumb iframe{position:absolute;left:0;top:0;width:1080px;height:1080px;border:0;transform-origin:top left;pointer-events:none;}
+  .card.story .thumb iframe{height:1920px;}
+  .meta{margin-top:14px;display:flex;justify-content:space-between;align-items:baseline;}
+  .meta .n{font:500 12px/1.2 var(--sans);letter-spacing:.18em;text-transform:uppercase;color:var(--ink);}
+  .meta .x{font:italic 300 14px/1 var(--serif);color:var(--ink-50);}
+  .desc{margin-top:6px;font:400 13px/1.5 var(--sans);color:var(--ink-50);}
+
+  /* RESIZE iframes via JS for accurate scaled previews */
+  /* Footer */
+  footer{margin-top:80px;border-top:1px solid rgba(10,10,10,.18);padding-top:24px;display:flex;justify-content:space-between;align-items:center;font:500 11px/1 var(--sans);letter-spacing:.22em;text-transform:uppercase;color:var(--ink-50);}
+  footer em{font:italic 300 14px/1 var(--serif);color:var(--ink);}
+</style>
+</head>
+<body>
+  <header class="top">
+    <span class="l">veto · campaign · social</span>
+    <span class="r"><span class="dot"></span>In session · MMXXVI</span>
+  </header>
+
+  <section class="hero">
+    <h1>premium social <em>campaign</em>.</h1>
+    <div>
+      <p class="lede">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua veniam.</p>
+      <p class="meta">Twenty designs · ten posts · ten stories</p>
+    </div>
+  </section>
+
+  <section>
+    <div class="sec"><h2>Feed posts <em>— 1080×1080.</em></h2><span class="ct">10 / 10</span></div>
+    <div class="grid posts" id="posts"></div>
+  </section>
+
+  <section>
+    <div class="sec"><h2>Stories <em>— 1080×1920.</em></h2><span class="ct">10 / 10</span></div>
+    <div class="grid stories" id="stories"></div>
+  </section>
+
+  <footer>
+    <span>— sigillum · MMXXVI</span>
+    <em>veto · capitolium</em>
+    <span>Series I · 01 / 20</span>
+  </footer>
+
+<script>
+  const POSTS = [
+    ['01-wordmark-hero','Wordmark hero','editorial paper sculpture'],
+    ['02-numbered-manifesto','Numbered manifesto','II · italic Fraunces'],
+    ['03-issue-01','Issue 01','dark sphere · etched glyph'],
+    ['04-pullquote','Pull-quote','italic editorial w/ highlight'],
+    ['05-statistics','Statistics','massive 92% · cube'],
+    ['06-manifesto-voice','Manifesto voice','three-line headline'],
+    ['07-endorsement','Endorsement','portrait + circle stamp'],
+    ['08-phase','Phase III','perspective card deck'],
+    ['09-ballot','Ballot','tilted ballot card'],
+    ['10-day-counter','Day counter','calendar grid · 12 days'],
+  ];
+  const STORIES = [
+    ['01-vertical-wordmark','Vertical wordmark','tall mark + tagline'],
+    ['02-manifesto-scroll','Manifesto scroll','dark stage · parchment'],
+    ['03-single-word','Single word','rotated · backlit'],
+    ['04-stat-reveal','Stat reveal','87% · split slab'],
+    ['05-portrait','Portrait','duotone + glass panel'],
+    ['06-issue-vertical','Issue vertical','perspective ticket'],
+    ['07-climate','Atmosphere','horizon orb · terrain'],
+    ['08-letter-sculpture','Letter sculpture','extruded V'],
+    ['09-quote-vertical','Quote vertical','editorial italic'],
+    ['10-save-the-date','Save the date','ticket card'],
+  ];
+
+  function build(host, list, dir, isStory){
+    const root = document.getElementById(host);
+    list.forEach(([slug,title,desc])=>{
+      const a = document.createElement('a');
+      a.className = 'card ' + (isStory ? 'story':'post');
+      a.href = `./${dir}/${slug}.html`;
+      a.target = '_blank';
+      a.innerHTML = `
+        <div class="thumb"><iframe src="./${dir}/${slug}.html" loading="lazy" scrolling="no" tabindex="-1" aria-hidden="true"></iframe></div>
+        <div class="meta"><span class="n">${title}</span><span class="x">${String(list.indexOf(list.find(x=>x[0]===slug))+1).padStart(2,'0')} / 10</span></div>
+        <div class="desc">${desc}</div>`;
+      root.appendChild(a);
+    });
+  }
+  build('posts', POSTS, 'posts', false);
+  build('stories', STORIES, 'stories', true);
+
+  // Scale iframes to fit thumbs
+  function fit(){
+    document.querySelectorAll('.card').forEach(c=>{
+      const iframe = c.querySelector('iframe');
+      const thumb = c.querySelector('.thumb');
+      const w = thumb.clientWidth;
+      const isStory = c.classList.contains('story');
+      const scale = w / 1080;
+      iframe.style.transform = `scale(${scale})`;
+    });
+  }
+  window.addEventListener('load', fit);
+  window.addEventListener('resize', fit);
+</script>
+</body>
+</html>

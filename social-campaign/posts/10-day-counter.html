@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>veto — feed 10 · day counter</title>
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:ital,wght@0,400;0,500;0,600;0,700;0,800;1,300&family=Fraunces:ital,opsz,wght@1,72,300;1,72,400&display=swap" rel="stylesheet">
+<style>
+  :root{--paper:#EFEAE0;--paper-2:#D4CBB4;--ink:#0A0A0A;--ink-50:#6B6457;--accent:#FF5A1F;
+    --serif:'Fraunces',serif;--sans:'Inter Tight',sans-serif;}
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{background:#161616;min-height:100vh;display:grid;place-items:center;padding:24px;font-family:var(--sans);color:var(--ink);}
+  .stage{position:relative;width:1080px;height:1080px;overflow:hidden;background:var(--paper);box-shadow:0 60px 120px -30px rgba(0,0,0,.65);}
+  @media(max-width:1180px){.stage{transform:scale(calc((100vw - 48px)/1080));transform-origin:top center}}
+
+  .lite{position:absolute;inset:0;pointer-events:none;
+    background:
+      radial-gradient(60% 60% at 20% 0%, rgba(255,235,205,.95), transparent 60%),
+      radial-gradient(80% 80% at 100% 110%, rgba(60,40,20,.22), transparent 60%),
+      linear-gradient(160deg,var(--paper) 0%, var(--paper-2) 100%);}
+  .grain{position:absolute;inset:0;opacity:.36;mix-blend-mode:multiply;pointer-events:none;
+    background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='240' height='240'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 .45 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");}
+
+  /* CALENDAR GRID — hairline, 7 columns × 5 rows */
+  .cal{position:absolute;left:64px;right:64px;top:240px;height:540px;border:1px solid rgba(10,10,10,.2);display:grid;grid-template-columns:repeat(7,1fr);grid-template-rows:repeat(5,1fr);}
+  .cell{border-right:1px solid rgba(10,10,10,.12);border-bottom:1px solid rgba(10,10,10,.12);position:relative;padding:14px 16px;display:flex;flex-direction:column;justify-content:space-between;}
+  .cell:nth-child(7n){border-right:0;}
+  .cell:nth-last-child(-n+7){border-bottom:0;}
+  .cell .d{font:500 13px/1 var(--sans);letter-spacing:-.01em;color:var(--ink);opacity:.7;}
+  .cell .x{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);font:italic 300 24px/1 var(--serif);color:var(--ink);opacity:.35;}
+  .cell.muted{background:rgba(10,10,10,.04);}
+  .cell.marked{background:#0A0A0A;color:#F2EFE7;}
+  .cell.marked .d{color:#F2EFE7;opacity:1;}
+  .cell.marked .x{color:var(--accent);opacity:1;}
+  .cell.election{background:var(--accent);}
+  .cell.election .d{color:#0A0A0A;}
+  .cell.election .x{color:#0A0A0A;opacity:1;font:600 22px/1 var(--sans);font-style:normal;}
+
+  /* TOP CHROME */
+  .top{position:absolute;left:64px;right:64px;top:56px;display:flex;justify-content:space-between;font:500 11px/1 var(--sans);letter-spacing:.22em;text-transform:uppercase;color:var(--ink);}
+  .top .l{display:flex;gap:14px;align-items:center;}
+  .top .l::before{content:"";width:32px;height:1px;background:currentColor;}
+  .top .r{color:var(--ink-50);}
+
+  /* MASSIVE day count overlapping calendar */
+  .days{position:absolute;left:64px;top:96px;display:flex;align-items:flex-end;gap:24px;}
+  .days .n{font:800 220px/.8 var(--sans);letter-spacing:-.05em;color:var(--ink);}
+  .days .lab{font:italic 300 36px/1 var(--serif);color:var(--accent);letter-spacing:-.02em;padding-bottom:24px;}
+
+  /* Right pull-out card sitting above grid */
+  .card{position:absolute;right:64px;top:120px;width:280px;background:#0A0A0A;color:#F2EFE7;padding:22px 24px;
+    box-shadow:0 30px 60px -20px rgba(0,0,0,.5);transform:rotate(2deg);}
+  .card .k{font:500 10px/1 var(--sans);letter-spacing:.24em;text-transform:uppercase;color:#9B958C;}
+  .card .h{margin-top:10px;font:600 28px/1.05 var(--sans);letter-spacing:-.014em;}
+  .card .ipsum{margin-top:12px;font:400 12px/1.5 var(--sans);color:#bdb6a8;}
+  .card .ln{margin-top:14px;height:1px;background:rgba(255,255,255,.18);}
+
+  .month{position:absolute;left:64px;bottom:140px;display:flex;justify-content:space-between;right:64px;align-items:baseline;border-top:1px solid rgba(10,10,10,.18);padding-top:18px;}
+  .month .m{font:italic 300 60px/1 var(--serif);letter-spacing:-.02em;color:var(--ink);}
+  .month .y{font:500 12px/1 var(--sans);letter-spacing:.22em;text-transform:uppercase;color:var(--ink-50);}
+
+  .foot{position:absolute;left:64px;right:64px;bottom:56px;display:flex;justify-content:space-between;font:500 11px/1 var(--sans);letter-spacing:.22em;text-transform:uppercase;color:var(--ink-50);}
+  .foot .swatch{display:inline-block;width:10px;height:10px;border-radius:99px;background:var(--accent);box-shadow:0 0 0 4px rgba(255,90,31,.18);vertical-align:-1px;margin-right:8px;}
+</style>
+</head>
+<body>
+  <div class="stage" role="img" aria-label="day counter calendar">
+    <div class="lite"></div>
+
+    <header class="top">
+      <span class="l">Lorem · day counter · 10</span>
+      <span class="r">N° 10 / 10</span>
+    </header>
+
+    <div class="days">
+      <span class="n">12</span>
+      <span class="lab">dies ad ipsum</span>
+    </div>
+
+    <article class="card">
+      <span class="k">Lorem · note</span>
+      <p class="h">Lorem ipsum dolor sit amet.</p>
+      <p class="ipsum">Consectetur adipiscing elit, sed do eiusmod.</p>
+      <span class="ln"></span>
+    </article>
+
+    <div class="cal" aria-hidden="true">
+      <div class="cell muted"><span class="d">29</span></div>
+      <div class="cell muted"><span class="d">30</span></div>
+      <div class="cell"><span class="d">01</span></div>
+      <div class="cell"><span class="d">02</span></div>
+      <div class="cell"><span class="d">03</span></div>
+      <div class="cell"><span class="d">04</span></div>
+      <div class="cell"><span class="d">05</span></div>
+      <div class="cell"><span class="d">06</span></div>
+      <div class="cell"><span class="d">07</span></div>
+      <div class="cell"><span class="d">08</span></div>
+      <div class="cell marked"><span class="d">09</span><span class="x">·</span></div>
+      <div class="cell"><span class="d">10</span></div>
+      <div class="cell"><span class="d">11</span></div>
+      <div class="cell"><span class="d">12</span></div>
+      <div class="cell"><span class="d">13</span></div>
+      <div class="cell"><span class="d">14</span></div>
+      <div class="cell"><span class="d">15</span></div>
+      <div class="cell marked"><span class="d">16</span></div>
+      <div class="cell"><span class="d">17</span></div>
+      <div class="cell"><span class="d">18</span></div>
+      <div class="cell"><span class="d">19</span></div>
+      <div class="cell"><span class="d">20</span></div>
+      <div class="cell"><span class="d">21</span></div>
+      <div class="cell"><span class="d">22</span></div>
+      <div class="cell"><span class="d">23</span></div>
+      <div class="cell election"><span class="d">24</span><span class="x">×</span></div>
+      <div class="cell"><span class="d">25</span></div>
+      <div class="cell"><span class="d">26</span></div>
+      <div class="cell"><span class="d">27</span></div>
+      <div class="cell"><span class="d">28</span></div>
+      <div class="cell"><span class="d">29</span></div>
+      <div class="cell"><span class="d">30</span></div>
+      <div class="cell muted"><span class="d">31</span></div>
+      <div class="cell muted"><span class="d">01</span></div>
+      <div class="cell muted"><span class="d">02</span></div>
+    </div>
+
+    <div class="month">
+      <span class="m">— mensis</span>
+      <span class="y">MMXXVI</span>
+    </div>
+
+    <footer class="foot">
+      <span><span class="swatch"></span>Active · countdown</span>
+      <span>Capitolium · 10 / 10</span>
+    </footer>
+
+    <div class="grain"></div>
+  </div>
+</body>
+</html>
