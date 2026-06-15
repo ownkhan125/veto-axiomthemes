@@ -5,9 +5,10 @@ import { useState, useEffect } from 'react';
 import { AnimatePresence, motion } from 'motion/react';
 
 const DESKTOP_LEFT = [
-  { href: '/about',         label: 'About' },
-  { href: '/ask',           label: 'Ask' },
-  { href: '/endorsements',  label: 'Endorsements' },
+  { href: '/about',              label: 'About' },
+  { href: '/ask',                label: 'Ask' },
+  { href: '/endorsements',       label: 'Endorsements' },
+  { href: '/social-media-posts', label: 'Posts' },
 ];
 const DESKTOP_RIGHT = [
   { href: '/events',    label: 'Events' },
@@ -15,12 +16,13 @@ const DESKTOP_RIGHT = [
 ];
 // Full menu used on mobile — keeps all the same links available in one place.
 const MOBILE_LINKS = [
-  { href: '/about',        label: 'About' },
-  { href: '/events',       label: 'Events' },
-  { href: '/volunteer',    label: 'Volunteer' },
-  { href: '/endorsements', label: 'Endorsements' },
-  { href: '/ask',          label: 'Ask a Question' },
-  { href: '/contact',      label: 'Contact' },
+  { href: '/about',              label: 'About' },
+  { href: '/events',             label: 'Events' },
+  { href: '/volunteer',          label: 'Volunteer' },
+  { href: '/endorsements',       label: 'Endorsements' },
+  { href: '/social-media-posts', label: 'Posts' },
+  { href: '/ask',                label: 'Ask a Question' },
+  { href: '/contact',            label: 'Contact' },
 ];
 
 const ArrowUpRight = ({ size = 10 }) => (

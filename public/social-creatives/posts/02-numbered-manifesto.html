@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>veto — feed 02 · numbered manifesto</title>
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:ital,wght@0,400;0,500;0,600;0,700;1,300&family=Fraunces:ital,opsz,wght@1,72,300;1,72,400&display=swap" rel="stylesheet">
+<style>
+  :root{--paper:#F2EFE7;--ink:#0A0A0A;--offblack:#0E0E0E;--ink-50:#767676;--accent:#FF5A1F;
+    --serif:'Fraunces',serif;--sans:'Inter Tight',sans-serif;}
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{background:#161616;min-height:100vh;display:grid;place-items:center;padding:24px;font-family:var(--sans);}
+  .stage{position:relative;width:1080px;height:1080px;overflow:hidden;background:var(--paper);box-shadow:0 60px 120px -30px rgba(0,0,0,.65);}
+  @media(max-width:1180px){.stage{transform:scale(calc((100vw - 48px)/1080));transform-origin:top center}}
+
+  /* Diagonal split — dark slab cuts in from right */
+  .slab{position:absolute;right:0;top:0;width:520px;height:100%;background:linear-gradient(160deg,#181410 0%,#0A0A0A 65%);box-shadow:inset 40px 0 80px -40px rgba(0,0,0,.7);z-index:2;}
+  .slab::before{content:"";position:absolute;left:-1px;top:0;bottom:0;width:1px;background:rgba(255,255,255,.06);}
+
+  /* Atmosphere on paper side */
+  .lite-l{position:absolute;left:0;top:0;width:560px;height:100%;
+    background:radial-gradient(80% 80% at 18% 18%,rgba(255,255,255,.65) 0%,rgba(255,255,255,0) 55%),
+               radial-gradient(70% 60% at 30% 110%,rgba(120,90,60,.18),transparent 60%);}
+  .grain{position:absolute;inset:0;opacity:.35;mix-blend-mode:multiply;pointer-events:none;
+    background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='240' height='240'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 .45 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");}
+
+  /* HUGE Roman numeral — sits on left paper side as watermark, accent dot only */
+  .numeral{position:absolute;left:64px;top:140px;font:italic 300 540px/.78 var(--serif);letter-spacing:-.04em;color:var(--ink);z-index:1;line-height:.78;}
+  .numeral .ii{display:inline-block;}
+  .numeral .ii::after{content:".";color:var(--accent);}
+  /* faint depth echo */
+  .numeral-echo{position:absolute;left:74px;top:150px;font:italic 300 540px/.78 var(--serif);letter-spacing:-.04em;color:transparent;-webkit-text-stroke:1.2px rgba(10,10,10,.18);z-index:0;line-height:.78;}
+
+  /* Eyebrow + index */
+  .top{position:absolute;left:64px;right:64px;top:56px;display:flex;justify-content:space-between;font:500 11px/1 var(--sans);letter-spacing:.22em;text-transform:uppercase;}
+  .top .l{color:var(--ink);display:flex;gap:14px;align-items:center;}
+  .top .l::before{content:"";width:34px;height:1px;background:currentColor;}
+  .top .r{color:#9B958C;text-align:right;}
+
+  /* Pull quote on dark slab */
+  .quote{position:absolute;right:54px;top:200px;width:430px;color:#F2EFE7;z-index:6;}
+  .quote .q{font:600 44px/1.06 var(--sans);letter-spacing:-.020em;}
+  .quote .q em{font:italic 300 48px/1 var(--serif);color:var(--accent);}
+  .quote .attr{margin-top:30px;font:500 11px/1.2 var(--sans);letter-spacing:.22em;text-transform:uppercase;color:#9B958C;display:flex;align-items:center;gap:14px;}
+  .quote .attr::before{content:"";width:24px;height:1px;background:currentColor;}
+
+  /* Paper card on left, raised */
+  .card{position:absolute;left:64px;bottom:130px;width:300px;height:170px;background:linear-gradient(180deg,#fff,#e2dccd);box-shadow:0 30px 60px -20px rgba(20,16,10,.45),0 2px 6px rgba(20,16,10,.18);transform:rotate(-3deg);padding:20px;display:flex;flex-direction:column;justify-content:space-between;z-index:6;}
+  .card .k{font:500 10px/1 var(--sans);letter-spacing:.22em;text-transform:uppercase;color:var(--ink-50);}
+  .card .b{font:600 22px/1.1 var(--sans);color:var(--ink);letter-spacing:-.01em;}
+  .card .ln{height:1px;background:rgba(0,0,0,.12);width:60%;}
+
+  .foot{position:absolute;left:64px;right:64px;bottom:56px;display:flex;justify-content:space-between;font:500 11px/1 var(--sans);letter-spacing:.18em;text-transform:uppercase;color:var(--ink-50);}
+  .foot .swatch{display:inline-block;width:10px;height:10px;border-radius:99px;background:var(--accent);box-shadow:0 0 0 4px rgba(255,90,31,.18);margin-right:8px;vertical-align:0px;}
+</style>
+<style id="embed-shim">html,body{background:transparent !important;padding:0 !important;margin:0 !important;min-height:0 !important;display:block !important;overflow:hidden !important;}.stage{box-shadow:none !important;margin:0 !important;display:block !important;}@media(max-width:1180px){.stage{transform:none !important;}}</style></head>
+<body>
+  <div class="stage" role="img" aria-label="numbered manifesto card">
+    <div class="lite-l"></div>
+    <div class="slab"></div>
+
+    <h1 class="numeral-echo" aria-hidden="true"><span class="ii">II</span></h1>
+    <h1 class="numeral"><span class="ii">II</span></h1>
+
+    <header class="top">
+      <span class="l">Manifesto · phase</span>
+      <span class="r">Capitolium · 026 / 240</span>
+    </header>
+
+    <aside class="quote">
+      <p class="q">Lorem ipsum dolor sit amet, <em>consectetur</em> adipiscing elit sed do eiusmod.</p>
+      <p class="attr">— lorem ipsum, dolor</p>
+    </aside>
+
+    <article class="card">
+      <span class="k">Section · 02</span>
+      <span class="b">Lorem ipsum dolor sit amet consectetur.</span>
+      <span class="ln"></span>
+    </article>
+
+    <footer class="foot">
+      <span><span class="swatch"></span>In session</span>
+      <span>Sigillum · MMXXVI</span>
+    </footer>
+    <div class="grain"></div>
+  </div>
+</body>
+</html>

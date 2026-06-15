@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>veto — story 09 · quote vertical</title>
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:ital,wght@0,400;0,500;0,600;1,300&family=Fraunces:ital,opsz,wght@1,72,300;1,72,400&display=swap" rel="stylesheet">
+<style>
+  :root{--paper:#EBE5D5;--paper-2:#D5CCB2;--ink:#0A0A0A;--bg:#0E0C09;--ink-50:#6B6457;--accent:#FF5A1F;
+    --serif:'Fraunces',serif;--sans:'Inter Tight',sans-serif;}
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{background:#161616;min-height:100vh;display:grid;place-items:center;padding:24px;font-family:var(--sans);color:var(--ink);}
+  .stage{position:relative;width:1080px;height:1920px;overflow:hidden;background:var(--paper);box-shadow:0 60px 120px -30px rgba(0,0,0,.65);}
+  @media(max-width:1180px){.stage{transform:scale(calc((100vw - 48px)/1080));transform-origin:top center}}
+
+  .lite{position:absolute;inset:0;pointer-events:none;
+    background:
+      radial-gradient(50% 30% at 70% 15%, rgba(255,228,190,.95), transparent 60%),
+      radial-gradient(70% 50% at 10% 95%, rgba(60,40,20,.32), transparent 60%),
+      linear-gradient(180deg,var(--paper),var(--paper-2));}
+  .grain{position:absolute;inset:0;opacity:.36;mix-blend-mode:multiply;pointer-events:none;
+    background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='240' height='240'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 .45 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");}
+
+  /* DARK SLAB at bottom — split */
+  .slab{position:absolute;left:0;right:0;bottom:0;height:760px;background:linear-gradient(180deg,#0E0C09,#000);
+    clip-path:polygon(0 28%, 100% 0, 100% 100%, 0 100%);}
+  .slab::before{content:"";position:absolute;left:0;right:0;top:28%;height:1px;background:rgba(255,255,255,.2);}
+  .slab .grid{position:absolute;inset:0;opacity:.12;background-image:linear-gradient(90deg, rgba(255,255,255,.4) 1px, transparent 1px);background-size:60px 60px;}
+
+  /* TOP CHROME */
+  .top{position:absolute;left:64px;right:64px;top:72px;display:flex;justify-content:space-between;font:500 13px/1 var(--sans);letter-spacing:.22em;text-transform:uppercase;color:var(--ink);z-index:5;}
+  .top .l{display:flex;gap:14px;align-items:center;}
+  .top .l::before{content:"";width:34px;height:1px;background:currentColor;}
+  .top .r{color:var(--ink-50);}
+  .hr{position:absolute;left:64px;right:64px;top:122px;height:1px;background:rgba(10,10,10,.18);z-index:5;}
+
+  /* OPENING QUOTE — huge italic */
+  .openq{position:absolute;left:42px;top:200px;font:italic 400 480px/.6 var(--serif);color:var(--accent);letter-spacing:-.05em;height:140px;}
+
+  /* MAIN QUOTE */
+  .quote{position:absolute;left:64px;right:64px;top:380px;font:italic 300 124px/1.02 var(--serif);letter-spacing:-.022em;color:var(--ink);}
+  .quote em{font:600 124px/1.02 var(--sans);font-style:normal;}
+  .quote .hl{position:relative;display:inline-block;isolation:isolate;}
+  .quote .hl::before{content:"";position:absolute;left:-6px;right:-8px;bottom:18px;height:24px;background:var(--accent);opacity:.85;z-index:-1;}
+
+  /* ATTRIBUTION + STAMP */
+  .attr{position:absolute;left:64px;top:1100px;display:flex;align-items:center;gap:20px;color:var(--ink);}
+  .attr .ln{width:64px;height:1px;background:currentColor;}
+  .attr .nm{font:600 22px/1 var(--sans);letter-spacing:-.014em;}
+  .attr .ti{font:500 12px/1 var(--sans);letter-spacing:.22em;text-transform:uppercase;color:var(--ink-50);margin-top:6px;}
+  .attr .col{display:flex;flex-direction:column;gap:0;}
+
+  /* CIRCLE STAMP */
+  .stamp{position:absolute;right:64px;top:1080px;width:140px;height:140px;border-radius:50%;border:1px solid var(--ink);display:grid;place-items:center;color:var(--ink);font:italic 300 44px/1 var(--serif);transform:rotate(-12deg);}
+  .stamp::before{content:"";position:absolute;inset:8px;border-radius:50%;border:1px dashed rgba(0,0,0,.4);}
+
+  /* BOTTOM block sits on slab — author bio */
+  .bio{position:absolute;left:64px;right:64px;bottom:200px;color:#F2EFE7;z-index:5;}
+  .bio .pre{font:500 11px/1 var(--sans);letter-spacing:.24em;text-transform:uppercase;color:#9B958C;display:flex;gap:14px;align-items:center;}
+  .bio .pre::before{content:"";width:32px;height:1px;background:currentColor;}
+  .bio .h{margin-top:18px;font:600 36px/1.08 var(--sans);letter-spacing:-.014em;}
+  .bio .ipsum{margin-top:14px;font:400 16px/1.55 var(--sans);color:#bdb6a8;max-width:46ch;}
+
+  .foot{position:absolute;left:64px;right:64px;bottom:60px;display:flex;justify-content:space-between;align-items:center;font:500 12px/1 var(--sans);letter-spacing:.22em;text-transform:uppercase;color:#9B958C;z-index:5;}
+  .foot .swatch{display:inline-block;width:10px;height:10px;border-radius:99px;background:var(--accent);box-shadow:0 0 0 4px rgba(255,90,31,.18);vertical-align:-1px;margin-right:10px;}
+</style>
+<style id="embed-shim">html,body{background:transparent !important;padding:0 !important;margin:0 !important;min-height:0 !important;display:block !important;overflow:hidden !important;}.stage{box-shadow:none !important;margin:0 !important;display:block !important;}@media(max-width:1180px){.stage{transform:none !important;}}</style></head>
+<body>
+  <div class="stage" role="img" aria-label="quote story">
+    <div class="lite"></div>
+
+    <header class="top">
+      <span class="l">Pull-quote · 09</span>
+      <span class="r">Lorem · ipsum dolor</span>
+    </header>
+    <span class="hr"></span>
+
+    <div class="openq">&ldquo;</div>
+
+    <p class="quote">Lorem <em>ipsum</em> dolor sit amet, consectetur <span class="hl">adipiscing</span> elit lorem.</p>
+
+    <div class="attr">
+      <span class="ln"></span>
+      <div class="col">
+        <span class="nm">— lorem ipsum</span>
+        <span class="ti">Dolor consectetur · adipiscing</span>
+      </div>
+    </div>
+
+    <span class="stamp">vt</span>
+
+    <div class="slab"><div class="grid"></div></div>
+
+    <section class="bio">
+      <span class="pre">Voce · vox publica</span>
+      <h2 class="h">Lorem ipsum dolor sit, <em>amet</em>.</h2>
+      <p class="ipsum">Consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore.</p>
+    </section>
+
+    <footer class="foot">
+      <span><span class="swatch"></span>Verified · live</span>
+      <span>N° 09 / 10</span>
+    </footer>
+
+    <div class="grain"></div>
+  </div>
+</body>
+</html>

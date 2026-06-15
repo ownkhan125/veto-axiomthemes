@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>veto — story 08 · letter sculpture</title>
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:ital,wght@0,400;0,500;0,600;0,700;0,800;1,300&family=Fraunces:ital,opsz,wght@1,72,300;1,72,400&display=swap" rel="stylesheet">
+<style>
+  :root{--paper:#EFEAE0;--paper-2:#D4CBB4;--ink:#0A0A0A;--ink-50:#6B6457;--accent:#FF5A1F;
+    --serif:'Fraunces',serif;--sans:'Inter Tight',sans-serif;}
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{background:#161616;min-height:100vh;display:grid;place-items:center;padding:24px;font-family:var(--sans);color:var(--ink);}
+  .stage{position:relative;width:1080px;height:1920px;overflow:hidden;background:var(--paper);box-shadow:0 60px 120px -30px rgba(0,0,0,.65);perspective:1400px;}
+  @media(max-width:1180px){.stage{transform:scale(calc((100vw - 48px)/1080));transform-origin:top center}}
+
+  .lite{position:absolute;inset:0;pointer-events:none;
+    background:
+      radial-gradient(55% 35% at 35% 20%, rgba(255,228,190,.95), transparent 60%),
+      radial-gradient(80% 50% at 90% 95%, rgba(60,40,20,.32), transparent 60%),
+      linear-gradient(180deg,var(--paper),var(--paper-2));}
+  .grain{position:absolute;inset:0;opacity:.36;mix-blend-mode:multiply;pointer-events:none;
+    background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='240' height='240'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 .45 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");}
+
+  /* 3D LETTER V — extruded with shadow */
+  .scene{position:absolute;left:50%;top:48%;width:780px;height:1000px;transform:translate(-50%,-50%);perspective:1200px;transform-style:preserve-3d;}
+  .v-shadow{position:absolute;left:50%;bottom:0;width:580px;height:120px;transform:translateX(-50%);background:radial-gradient(60% 100% at 50% 0%,rgba(0,0,0,.55),transparent 70%);filter:blur(18px);}
+
+  /* extrusion built from many stacked V's */
+  .extrude{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%) rotateX(8deg) rotateY(-12deg);transform-style:preserve-3d;font:800 720px/.8 var(--sans);letter-spacing:-.05em;color:var(--ink);}
+  .extrude .layer{position:absolute;left:0;top:0;color:#c8bea0;}
+  .extrude .top-face{position:relative;color:#1a1a1a;
+    background:linear-gradient(180deg,#fff 0%,#a9a08b 100%);
+    -webkit-background-clip:text;background-clip:text;color:transparent;
+    text-shadow:0 1px 0 rgba(255,255,255,.5);}
+  .extrude .top-face::after{content:"V";position:absolute;left:0;top:0;color:transparent;-webkit-text-stroke:2px rgba(10,10,10,.4);}
+  .extrude .hilite{position:absolute;left:0;top:0;color:transparent;
+    background:linear-gradient(180deg, rgba(255,228,190,.9) 0%, rgba(255,228,190,0) 35%);
+    -webkit-background-clip:text;background-clip:text;}
+
+  /* ACCENT slash */
+  .accent{position:absolute;left:50%;top:52%;width:140px;height:12px;background:var(--accent);transform:translate(-50%,-50%) rotate(-20deg);box-shadow:0 12px 24px -4px rgba(255,90,31,.6);}
+
+  /* TOP CHROME */
+  .top{position:absolute;left:64px;right:64px;top:72px;display:flex;justify-content:space-between;font:500 13px/1 var(--sans);letter-spacing:.22em;text-transform:uppercase;color:var(--ink);}
+  .top .l{display:flex;gap:14px;align-items:center;}
+  .top .l::before{content:"";width:34px;height:1px;background:currentColor;}
+  .top .r{color:var(--ink-50);}
+  .hr{position:absolute;left:64px;right:64px;top:122px;height:1px;background:rgba(10,10,10,.18);}
+
+  /* Side caption */
+  .side{position:absolute;right:64px;top:50%;transform:translateY(-50%) rotate(-90deg);transform-origin:right center;font:italic 300 28px/1 var(--serif);color:var(--ink-50);letter-spacing:-.01em;white-space:nowrap;}
+
+  /* BOTTOM */
+  .bottom{position:absolute;left:64px;right:64px;bottom:140px;}
+  .bottom .pre{font:500 12px/1 var(--sans);letter-spacing:.22em;text-transform:uppercase;color:var(--ink-50);display:flex;align-items:center;gap:14px;}
+  .bottom .pre::before{content:"";width:34px;height:1px;background:currentColor;}
+  .bottom .h{margin-top:18px;font:600 64px/1.04 var(--sans);letter-spacing:-.018em;color:var(--ink);max-width:18ch;}
+  .bottom .h em{font:italic 300 64px/1.04 var(--serif);color:var(--accent);}
+  .bottom .ipsum{margin-top:22px;font:400 17px/1.55 var(--sans);color:var(--ink-50);max-width:46ch;}
+
+  .foot{position:absolute;left:64px;right:64px;bottom:60px;display:flex;justify-content:space-between;align-items:center;font:500 12px/1 var(--sans);letter-spacing:.22em;text-transform:uppercase;color:var(--ink-50);}
+  .foot .swatch{display:inline-block;width:10px;height:10px;border-radius:99px;background:var(--accent);box-shadow:0 0 0 4px rgba(255,90,31,.18);vertical-align:-1px;margin-right:10px;}
+
+  /* CORNER PLINTHS — small geometric solids */
+  .plinth{position:absolute;left:64px;bottom:520px;width:120px;height:80px;background:linear-gradient(180deg,#fff,#bdb29b);box-shadow:0 18px 36px -10px rgba(0,0,0,.3);transform:rotateX(60deg);transform-origin:bottom center;}
+  .plinth2{position:absolute;right:120px;bottom:600px;width:90px;height:60px;background:linear-gradient(180deg,#fff,#b1a78d);box-shadow:0 18px 36px -10px rgba(0,0,0,.3);transform:rotateX(60deg);transform-origin:bottom center;}
+</style>
+<style id="embed-shim">html,body{background:transparent !important;padding:0 !important;margin:0 !important;min-height:0 !important;display:block !important;overflow:hidden !important;}.stage{box-shadow:none !important;margin:0 !important;display:block !important;}@media(max-width:1180px){.stage{transform:none !important;}}</style></head>
+<body>
+  <div class="stage" role="img" aria-label="letter sculpture">
+    <div class="lite"></div>
+
+    <header class="top">
+      <span class="l">Letter · sculpture</span>
+      <span class="r">N° 08 / 10</span>
+    </header>
+    <span class="hr"></span>
+
+    <span class="side">— v · veto · vox · vita · vere</span>
+
+    <div class="scene" aria-hidden="true">
+      <div class="extrude" style="text-shadow:
+        2px 2px 0 #b8af96,
+        4px 4px 0 #ada48b,
+        6px 6px 0 #a39b81,
+        8px 8px 0 #989077,
+        10px 10px 0 #8e866d,
+        12px 12px 0 #837b64,
+        14px 14px 0 #79715a,
+        16px 16px 0 #6e6750,
+        18px 18px 0 #645d47,
+        20px 20px 0 #5a533d,
+        22px 22px 0 #4f4934,
+        24px 24px 0 #453f2a,
+        26px 26px 0 #3b3520,
+        28px 28px 0 #312c17,
+        30px 30px 40px rgba(0,0,0,.5);">V</div>
+      <span class="accent"></span>
+      <span class="v-shadow"></span>
+    </div>
+
+    <span class="plinth"></span>
+    <span class="plinth2"></span>
+
+    <footer class="bottom">
+      <span class="pre">Capitulum · viii</span>
+      <h2 class="h">Lorem ipsum dolor sit, <em>amet</em> consectetur.</h2>
+      <p class="ipsum">Adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+    </footer>
+
+    <div class="foot">
+      <span><span class="swatch"></span>Live · session</span>
+      <span>N° 08 / 10</span>
+    </div>
+
+    <div class="grain"></div>
+  </div>
+</body>
+</html>
